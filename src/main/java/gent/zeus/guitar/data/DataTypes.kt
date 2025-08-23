@@ -4,7 +4,7 @@ data class Track(
     val spotifyId: String,
     val name: String?,
     val album: Album?,
-    val artists: List<Artist>?,
+    val artists: List<Artist?>,
 )
 
 data class Artist(

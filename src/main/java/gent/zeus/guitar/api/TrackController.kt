@@ -1,5 +1,6 @@
 package gent.zeus.guitar.api
 
+import gent.zeus.guitar.data.Track
 import gent.zeus.guitar.spotify.TrackDetails
 import gent.zeus.guitar.spotify.TrackFetcher
 import org.springframework.stereotype.Controller
@@ -13,6 +14,5 @@ import org.springframework.web.bind.annotation.RestController
 class TrackController {
 
     @GetMapping("/{id}")
-    fun getTrackById(@PathVariable id: String): TrackDetails =
-        TrackFetcher(id).fetchDetails()
+    fun getTrackById(@PathVariable id: String): Track? = TrackFetcher(id).fetchDetails()
 }
