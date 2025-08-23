@@ -56,20 +56,4 @@ class TrackFetcher(val id: String) {
             )
         }
     }
-
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-    private data class TrackJson(
-        @JsonProperty("name") val name: String,
-        val durationMs: Int,
-        val artists: List<ArtistJson>,
-        val album: AlbumJson,
-    )
-
-    private data class ArtistJson(
-        val name: String,
-    )
-
-    private data class AlbumJson(
-        val name: String,
-    )
 }
