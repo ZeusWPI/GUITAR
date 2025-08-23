@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.4'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 group = 'gent.zeus'
@@ -26,9 +27,17 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// https://kotlinlang.org/docs/annotations.html#all-meta-target
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xannotation-default-target=param-property")
+    }
 }
