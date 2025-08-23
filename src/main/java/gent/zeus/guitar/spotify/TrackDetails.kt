@@ -1,6 +1,10 @@
 package gent.zeus.guitar.spotify
 
-import gent.zeus.guitar.Global
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
+import gent.zeus.guitar.REST_CLIENT
+import gent.zeus.guitar.SPOTIFY_API_URL
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.body
@@ -11,31 +15,32 @@ import org.springframework.web.client.body
 // api.spotify.com/v1/tracks/5g1POu3HMfYQ0OX4lzlU6D
 
 data class TrackDetails(
-    val title: String,
-    val artist: String,
-    val album: String,
+    val title: String?,
+    val artist: List<String>?,
+    val album: String?,
 )
 
 class TrackFetcher(val id: String) {
     fun fetchDetails(): TrackDetails {
-        val trackJson = Global.REST_CLIENT.get()
-            .uri("${Global.SPOTIFY_API_URL}/tracks/$id")
-            .header(HttpHeaders.AUTHORIZATION, "Bearer ${SpotifyGlobal.token}")
+        val trackJson = REST_CLIENT.get()
+            .uri("${SPOTIFY_API_URL}/tracks/$id")
+            .header(HttpHeaders.AUTHORIZATION, "Bearer ${SpotifyToken.get()}")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .body<TrackJson>()
 
         return TrackDetails(
-            trackJson?.name ?: "unknown",
-            "none", // trackJson?.artist?.name ?: "unknown",
-            trackJson?.album?.name ?: "unknown",
+            trackJson?.name,
+            trackJson?.artists?.map { artistJson -> artistJson.name },
+            trackJson?.album?.name,
         )
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
     private data class TrackJson(
-        val name: String,
+        @JsonProperty("name") val name: String,
         val durationMs: Int,
-        // val artist: ArtistJson,
+        val artists: List<ArtistJson>,
         val album: AlbumJson,
     )
 
