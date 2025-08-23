@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/track")
+@RequestMapping("/track/{id}")
 class TrackController {
 
-    @GetMapping("/{id}")
+    @GetMapping("/details")
     fun getTrackById(@PathVariable id: String): Track? = TrackFetcher(id).fetchDetails()
 }
