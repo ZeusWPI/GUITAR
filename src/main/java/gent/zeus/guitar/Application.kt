@@ -1,36 +1,38 @@
 package gent.zeus.guitar
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.fasterxml.jackson.databind.type.LogicalType
+import gent.zeus.guitar.spotify.SpotifyToken
+import org.apache.juli.logging.Log
 import org.springframework.boot.CommandLineRunner
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.Bean
-import org.springframework.core.env.Environment
+import org.springframework.boot.runApplication
+import org.springframework.stereotype.Component
+import kotlin.system.exitProcess
+
 
 @SpringBootApplication
-open class Application {
-    /*
-        @Bean
-        public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-            return args -> {
-                System.out.println("-----------------------------");
-                System.out.println("  beans provided by spring:  ");
-                System.out.println("-----------------------------");
+open class Application
 
-                Arrays.stream(ctx.getBeanDefinitionNames())
-                        .sorted()
-                        .forEach(System.out::println);
-            };
+fun main(args: Array<String>) {
+    runApplication<Application>(*args)
+}
+
+@Component
+class DoStartupChecks : CommandLineRunner {
+    private val checklist: List<StartupCheck> = listOf(
+        SpotifyToken
+    )
+
+    override fun run(vararg args: String?) {
+        Logging.log.info("running startup checks...")
+
+        checklist.asSequence().map { it.checkOnStartup() }.forEach {
+            if (!it.checkPassed) {
+                Logging.log.error(it.message)
+                exitProcess(1)
+            }
         }
-    */
 
-
-    companion object {
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            SpringApplication.run(Application::class.java, *args)
-        }
+        Logging.log.info("startup checks complete!")
     }
 }

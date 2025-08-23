@@ -8,7 +8,7 @@ import gent.zeus.guitar.Logging
 import org.springframework.http.MediaType
 import org.springframework.web.client.body
 
-internal class ApiTokenGetter {
+internal class ApiTokenGetterOld {
     // xhs post
     // https://accounts.spotify.com/api/token
     // content-type:application/x-www-form-urlencoded
@@ -18,12 +18,6 @@ internal class ApiTokenGetter {
 
     val spotifyId: String = System.getenv("SPOTIFY_CLIENT_ID");
     val spotifySecret: String = System.getenv("SPOTIFY_CLIENT_SECRET");
-
-    init {
-        if (spotifyId.isEmpty() || spotifySecret.isEmpty()) {
-            throw SpotifyApiException("no spotify client id or secret set!")
-        }
-    }
 
     val token: String?
         get() {
