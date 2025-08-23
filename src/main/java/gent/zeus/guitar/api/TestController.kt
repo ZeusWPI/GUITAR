@@ -1,13 +1,15 @@
-package gent.zeus.guitar
+package gent.zeus.guitar.api
 
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.view.RedirectView
-import java.util.*
+import java.util.Base64
 
 @RestController
-class AppController {
+@RequestMapping("/test")
+class TestController {
     @GetMapping("/")
     fun rootRedirect(): RedirectView {
         return RedirectView("/index")
@@ -16,11 +18,6 @@ class AppController {
     @GetMapping("/index")
     fun index(): HelloResponse {
         return HelloResponse("weeee!!")
-    }
-
-    @GetMapping("/echo")
-    fun echo(@RequestParam message: String, @RequestParam(defaultValue = "1") times: Int): HelloResponse {
-        return HelloResponse(message.repeat(times))
     }
 
     @GetMapping("/saturn")
@@ -34,7 +31,6 @@ class AppController {
         }
     }
 
-    @JvmRecord
     data class HelloResponse(
         val response: String?
     )

@@ -1,0 +1,18 @@
+package gent.zeus.guitar.api
+
+import gent.zeus.guitar.spotify.TrackDetails
+import gent.zeus.guitar.spotify.TrackFetcher
+import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/track")
+class TrackController {
+
+    @GetMapping("/{id}")
+    fun getTrackById(@PathVariable id: String): TrackDetails =
+        TrackFetcher(id).fetchDetails()
+}

@@ -1,5 +1,8 @@
 package gent.zeus.guitar.spotify
 
 object SpotifyGlobal {
-    val apiTokenGetter: ApiTokenGetter = ApiTokenGetter()
+    private val apiTokenGetter = ApiTokenGetter()
+
+    val token: String?
+        get() = apiTokenGetter.token
 }

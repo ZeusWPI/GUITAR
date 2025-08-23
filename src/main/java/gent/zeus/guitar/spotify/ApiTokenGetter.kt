@@ -3,21 +3,42 @@ package gent.zeus.guitar.spotify
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import gent.zeus.guitar.Global
+import gent.zeus.guitar.Logging
 import org.springframework.http.MediaType
-import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
 
-class ApiTokenGetter {
+internal class ApiTokenGetter {
+    // xhs post
+    // https://accounts.spotify.com/api/token
+    // content-type:application/x-www-form-urlencoded
+    // --raw "
+
+    // TODO implement caching
+
+    val spotifyId: String = System.getenv("SPOTIFY_CLIENT_ID");
+    val spotifySecret: String = System.getenv("SPOTIFY_CLIENT_SECRET");
+
+    init {
+        if (spotifyId.isEmpty() || spotifySecret.isEmpty()) {
+            throw SpotifyApiException("no spotify client id or secret set!")
+        }
+    }
+
     val token: String?
         get() {
-            val accessToken: SpotifyAccessToken? = REST_CLIENT.get()
+            val accessToken: SpotifyAccessToken? = Global.REST_CLIENT.post()
                 .uri("https://accounts.spotify.com/api/token")
                 .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body("grant_type=client_credentials&client_id=${spotifyId}&client_secret=${spotifySecret}")
                 .retrieve()
-                .body<SpotifyAccessToken?>(SpotifyAccessToken::class.java)
+                .body<SpotifyAccessToken>()
 
             if (accessToken == null) {
                 throw SpotifyApiException("response body was empty")
             }
+            Logging.log.info("got spotify token: ${accessToken.token}")
             return accessToken.token
         }
 
@@ -27,13 +48,4 @@ class ApiTokenGetter {
         val tokenType: String?,
         val expiresIn: Int
     )
-
-    companion object {
-        // xhs post
-        // https://accounts.spotify.com/api/token
-        // content-type:application/x-www-form-urlencoded
-        // --raw "grant_type=client_credentials&client_id=$SPOTI_ID&client_secret=$SPOTI_SECRET
-        // TODO implement caching
-        private val REST_CLIENT: RestClient = RestClient.create()
-    }
 }
