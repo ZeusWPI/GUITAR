@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import gent.zeus.guitar.REST_CLIENT
 import gent.zeus.guitar.SPOTIFY_API_URL
+import gent.zeus.guitar.data.Track
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.body
@@ -21,7 +22,7 @@ data class TrackDetails(
 )
 
 class TrackFetcher(val id: String) {
-    fun fetchDetails(): TrackDetails {
+    fun fetchDetails(): Track {
         val trackJson = REST_CLIENT.get()
             .uri("${SPOTIFY_API_URL}/tracks/$id")
             .header(HttpHeaders.AUTHORIZATION, "Bearer ${SpotifyToken.get()}")
@@ -29,11 +30,8 @@ class TrackFetcher(val id: String) {
             .retrieve()
             .body<TrackJson>()
 
-        return TrackDetails(
-            trackJson?.name,
-            trackJson?.artists?.map { artistJson -> artistJson.name },
-            trackJson?.album?.name,
-        )
+        val artists: List<ArtistJson>
+        TODO()
     }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
