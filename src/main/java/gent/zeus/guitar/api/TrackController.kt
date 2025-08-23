@@ -1,7 +1,6 @@
 package gent.zeus.guitar.api
 
 import gent.zeus.guitar.data.Track
-import gent.zeus.guitar.spotify.TrackDetails
 import gent.zeus.guitar.spotify.TrackFetcher
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping

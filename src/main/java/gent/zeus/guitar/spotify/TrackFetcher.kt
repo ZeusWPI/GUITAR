@@ -1,8 +1,5 @@
 package gent.zeus.guitar.spotify
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.annotation.JsonNaming
 import gent.zeus.guitar.Logging
 import gent.zeus.guitar.REST_CLIENT
 import gent.zeus.guitar.SPOTIFY_API_URL
@@ -13,12 +10,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.body
 
-
-data class TrackDetails(
-    val title: String?,
-    val artist: List<String>?,
-    val album: String?,
-)
 
 class TrackFetcher(val id: String) {
     fun fetchDetails(): Track? {
