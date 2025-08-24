@@ -14,7 +14,7 @@ sealed interface SpotifyJson {
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class SpotifyTrackJson(
     val album: SpotifyAlbumJson?,
-    val artists: List<SpotifyArtistJson?>,
+    val artists: List<SpotifyArtistJson>?,
     val durationMs: Int?,
     val id: String,
     val name: String?,
@@ -26,9 +26,9 @@ internal data class SpotifyTrackJson(
 internal data class SpotifyAlbumJson(
     val totalTracks: Int?,
     val id: String,
-    val images: List<SpotifyImageJson?>?,
+    val images: List<SpotifyImageJson>?,
     val name: String?,
-    val artists: List<SpotifyArtistJson?>?,
+    val artists: List<SpotifyArtistJson>?,
     val tracks: SpotifyAlbumTracklistJson?,
 ) : SpotifyJson {
     override val typeString = "album"
@@ -36,15 +36,15 @@ internal data class SpotifyAlbumJson(
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class SpotifyAlbumTracklistJson(
-    val items: List<SpotifyTrackJson?>,
+    val items: List<SpotifyTrackJson>,
 )
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class SpotifyArtistJson(
-    val genres: List<String?>?,
+    val genres: List<String>?,
     val name: String?,
     val id: String,
-    val images: List<SpotifyImageJson?>?,
+    val images: List<SpotifyImageJson>?,
 ) : SpotifyJson {
     override val typeString = "artist"
 }

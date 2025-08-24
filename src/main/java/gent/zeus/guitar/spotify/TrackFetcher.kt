@@ -17,21 +17,21 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
                         albumJson.name,
                         null,
                         albumJson.artists?.map { artistJson ->
-                            if (artistJson == null) return null
                             Artist(
                                 artistJson.id,
-                                artistJson.name
+                                artistJson.name,
+                                null,
                             )
                         } ?: emptyList(),
                     )
                 },
-                trackJson.artists.map { artistJson ->
-                    if (artistJson == null) return null
+                trackJson.artists?.map { artistJson ->
                     Artist(
                         artistJson.id,
                         artistJson.name,
+                        null,
                     )
-                },
+                } ?: emptyList(),
             )
         }
 }

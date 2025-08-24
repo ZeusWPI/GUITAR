@@ -12,25 +12,24 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                 albumJson.id,
                 albumJson.name,
                 albumJson.tracks?.items?.map { trackJson ->
-                    if (trackJson == null) return null
                     Track(
                         trackJson.id,
                         trackJson.name,
                         null,
-                        trackJson.artists.map { artistJson ->
-                            if (artistJson == null) return null
+                        trackJson.artists?.map { artistJson ->
                             Artist(
                                 artistJson.id,
-                                artistJson.name
+                                artistJson.name,
+                                null
                             )
-                        },
+                        } ?: emptyList(),
                     )
                 } ?: emptyList(),
                 albumJson.artists?.map { artistJson ->
-                    if (artistJson == null) return null
                     Artist(
                         artistJson.id,
-                        artistJson.name
+                        artistJson.name,
+                        null
                     )
                 } ?: emptyList(),
             )
