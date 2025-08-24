@@ -14,6 +14,7 @@ abstract class SpotifyFetcher<T : MusicalObject>(
 ) {
     abstract fun fetch(): T?
 
+    // TODO handle http error 4xx
     protected fun makeApiRequest(): RestClient.ResponseSpec =
         REST_CLIENT.get()
             .uri("${SPOTIFY_API_URL}/${spotifyObjectType.apiUrlPrefix}/${id}")
