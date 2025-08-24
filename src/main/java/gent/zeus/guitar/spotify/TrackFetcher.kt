@@ -5,7 +5,7 @@ import gent.zeus.guitar.data.Artist
 import gent.zeus.guitar.data.Track
 import org.springframework.web.client.body
 
-class TrackFetcher(id: String) : Fetcher<Track>(id, SpotifyObjectType.TRACK) {
+class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRACK) {
     override fun fetch(): Track? = makeApiRequest().body<SpotifyTrackJson>()
         .takeIfNotNullOrLog()?.let { trackJson ->
             val artists: List<Artist?> = trackJson.artists.map { artistJson ->

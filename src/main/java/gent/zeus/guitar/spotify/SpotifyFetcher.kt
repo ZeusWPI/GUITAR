@@ -8,7 +8,10 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestClient
 
-abstract class Fetcher<T : MusicalObject>(private val id: String, private val spotifyObjectType: SpotifyObjectType) {
+abstract class SpotifyFetcher<T : MusicalObject>(
+    private val id: String,
+    private val spotifyObjectType: SpotifyObjectType
+) {
     abstract fun fetch(): T?
 
     protected fun makeApiRequest(): RestClient.ResponseSpec =
