@@ -21,8 +21,10 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
                                 artistJson.id,
                                 artistJson.name,
                                 null,
+                                null,
                             )
                         } ?: emptyList(),
+                        null,
                     )
                 },
                 trackJson.artists?.map { artistJson ->
@@ -30,8 +32,10 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
                         artistJson.id,
                         artistJson.name,
                         null,
+                        null,
                     )
                 } ?: emptyList(),
+                trackJson.externalUrls?.spotify,
             )
         }
 }

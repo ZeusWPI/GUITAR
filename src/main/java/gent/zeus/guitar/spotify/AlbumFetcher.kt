@@ -21,8 +21,10 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                                 artistJson.id,
                                 artistJson.name,
                                 null,
+                                null,
                             )
                         } ?: emptyList(),
+                        null,
                     )
                 } ?: emptyList(),
                 albumJson.artists?.map { artistJson ->
@@ -30,8 +32,10 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                         artistJson.id,
                         artistJson.name,
                         null,
+                        null,
                     )
                 } ?: emptyList(),
+                albumJson.externalUrls?.spotify,
             )
         }
 }

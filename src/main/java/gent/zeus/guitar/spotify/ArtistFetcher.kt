@@ -10,6 +10,7 @@ class ArtistFetcher(var id: String) : SpotifyFetcher<Artist>(id, SpotifyObjectTy
                 artistJson.id,
                 artistJson.name,
                 artistJson.genres ?: emptyList(),
+                artistJson.externalUrls?.spotify,
             )
         }
 }
