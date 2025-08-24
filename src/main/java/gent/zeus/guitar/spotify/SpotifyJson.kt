@@ -7,9 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
  * data classes mapping to spotify api response json
  */
 
-sealed interface SpotifyJson {
-    val typeString: String
-}
+sealed interface SpotifyJson
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class SpotifyTrackJson(
@@ -18,9 +16,7 @@ internal data class SpotifyTrackJson(
     val durationMs: Int?,
     val id: String,
     val name: String?,
-) : SpotifyJson {
-    override val typeString = "track"
-}
+) : SpotifyJson
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class SpotifyAlbumJson(
@@ -30,9 +26,7 @@ internal data class SpotifyAlbumJson(
     val name: String?,
     val artists: List<SpotifyArtistJson>?,
     val tracks: SpotifyAlbumTracklistJson?,
-) : SpotifyJson {
-    override val typeString = "album"
-}
+) : SpotifyJson
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class SpotifyAlbumTracklistJson(
@@ -45,9 +39,7 @@ internal data class SpotifyArtistJson(
     val name: String?,
     val id: String,
     val images: List<SpotifyImageJson>?,
-) : SpotifyJson {
-    override val typeString = "artist"
-}
+) : SpotifyJson
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 internal data class SpotifyImageJson(

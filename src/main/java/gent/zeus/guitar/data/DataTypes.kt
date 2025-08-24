@@ -16,7 +16,7 @@ data class Track(
 data class Artist(
     val spotifyId: String,
     val name: String?,
-    val albums: List<Album>?
+    val genres: List<String>?
 ) : MusicalObject
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

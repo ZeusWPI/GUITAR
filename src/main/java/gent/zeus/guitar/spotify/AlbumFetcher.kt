@@ -20,7 +20,7 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                             Artist(
                                 artistJson.id,
                                 artistJson.name,
-                                null
+                                null,
                             )
                         } ?: emptyList(),
                     )
@@ -29,7 +29,7 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                     Artist(
                         artistJson.id,
                         artistJson.name,
-                        null
+                        null,
                     )
                 } ?: emptyList(),
             )

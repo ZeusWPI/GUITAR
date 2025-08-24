@@ -9,7 +9,7 @@ class ArtistFetcher(var id: String) : SpotifyFetcher<Artist>(id, SpotifyObjectTy
             Artist(
                 artistJson.id,
                 artistJson.name,
-                null
+                artistJson.genres ?: emptyList(),
             )
         }
 }
