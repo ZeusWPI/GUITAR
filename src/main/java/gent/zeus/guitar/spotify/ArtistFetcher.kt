@@ -7,10 +7,10 @@ class ArtistFetcher(var id: String) : SpotifyFetcher<Artist>(id, SpotifyObjectTy
     override fun fetch(): Artist? = makeApiRequest().body<SpotifyArtistJson>()
         .takeIfNotNullOrLog()?.let { artistJson ->
             Artist(
-                artistJson.id,
-                artistJson.name,
-                artistJson.genres ?: emptyList(),
-                artistJson.externalUrls?.spotify,
+                spotifyId = artistJson.id,
+                name = artistJson.name,
+                genres = artistJson.genres ?: emptyList(),
+                spotifyUrl = artistJson.externalUrls?.spotify,
             )
         }
 }

@@ -9,33 +9,33 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
     override fun fetch(): Track? = makeApiRequest().body<SpotifyTrackJson>()
         .takeIfNotNullOrLog()?.let { trackJson ->
             Track(
-                trackJson.id,
-                trackJson.name,
-                trackJson.album?.let { albumJson ->
+                spotifyId = trackJson.id,
+                name = trackJson.name,
+                album = trackJson.album?.let { albumJson ->
                     Album(
-                        albumJson.id,
-                        albumJson.name,
-                        null,
-                        albumJson.artists?.map { artistJson ->
+                        spotifyId = albumJson.id,
+                        name = albumJson.name,
+                        tracks = null,
+                        artists = albumJson.artists?.map { artistJson ->
                             Artist(
-                                artistJson.id,
-                                artistJson.name,
-                                null,
-                                null,
+                                spotifyId = artistJson.id,
+                                name = artistJson.name,
+                                genres = null,
+                                spotifyUrl = null,
                             )
                         } ?: emptyList(),
-                        null,
+                        spotifyUrl = null,
                     )
                 },
-                trackJson.artists?.map { artistJson ->
+                artists = trackJson.artists?.map { artistJson ->
                     Artist(
-                        artistJson.id,
-                        artistJson.name,
-                        null,
-                        null,
+                        spotifyId = artistJson.id,
+                        name = artistJson.name,
+                        genres = null,
+                        spotifyUrl = null,
                     )
                 } ?: emptyList(),
-                trackJson.externalUrls?.spotify,
+                spotifyUrl = trackJson.externalUrls?.spotify,
             )
         }
 }

@@ -9,33 +9,33 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
     override fun fetch(): Album? = makeApiRequest().body<SpotifyAlbumJson>()
         .takeIfNotNullOrLog()?.let { albumJson ->
             Album(
-                albumJson.id,
-                albumJson.name,
-                albumJson.tracks?.items?.map { trackJson ->
+                spotifyId = albumJson.id,
+                name = albumJson.name,
+                tracks = albumJson.tracks?.items?.map { trackJson ->
                     Track(
-                        trackJson.id,
-                        trackJson.name,
-                        null,
-                        trackJson.artists?.map { artistJson ->
+                        spotifyId = trackJson.id,
+                        name = trackJson.name,
+                        album = null,
+                        artists = trackJson.artists?.map { artistJson ->
                             Artist(
-                                artistJson.id,
-                                artistJson.name,
-                                null,
-                                null,
+                                spotifyId = artistJson.id,
+                                name = artistJson.name,
+                                genres = null,
+                                spotifyUrl = null,
                             )
                         } ?: emptyList(),
-                        null,
+                        spotifyUrl = null,
                     )
                 } ?: emptyList(),
-                albumJson.artists?.map { artistJson ->
+                artists = albumJson.artists?.map { artistJson ->
                     Artist(
-                        artistJson.id,
-                        artistJson.name,
-                        null,
-                        null,
+                        spotifyId = artistJson.id,
+                        name = artistJson.name,
+                        genres = null,
+                        spotifyUrl = null,
                     )
                 } ?: emptyList(),
-                albumJson.externalUrls?.spotify,
+                spotifyUrl = albumJson.externalUrls?.spotify,
             )
         }
 }
