@@ -8,24 +8,30 @@ import org.springframework.web.client.body
 class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRACK) {
     override fun fetch(): Track? = makeApiRequest().body<SpotifyTrackJson>()
         .takeIfNotNullOrLog()?.let { trackJson ->
-            val artists: List<Artist?> = trackJson.artists.map { artistJson ->
-                if (artistJson == null) null else
+            Track(
+                trackJson.id,
+                trackJson.name,
+                trackJson.album?.let { albumJson ->
+                    Album(
+                        albumJson.id,
+                        albumJson.name,
+                        null,
+                        albumJson.artists?.map { artistJson ->
+                            if (artistJson == null) return null
+                            Artist(
+                                artistJson.id,
+                                artistJson.name
+                            )
+                        } ?: emptyList(),
+                    )
+                },
+                trackJson.artists.map { artistJson ->
+                    if (artistJson == null) return null
                     Artist(
                         artistJson.id,
                         artistJson.name,
                     )
-            }
-            val album: Album? = trackJson.album.takeIf { it != null }?.let { albumJson ->
-                Album(
-                    albumJson.id,
-                    albumJson.name,
-                )
-            }
-            Track(
-                trackJson.id,
-                trackJson.name,
-                album,
-                artists,
+                },
             )
         }
 }

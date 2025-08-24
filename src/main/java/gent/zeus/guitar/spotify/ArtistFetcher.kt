@@ -8,7 +8,7 @@ class ArtistFetcher(var id: String) : SpotifyFetcher<Artist>(id, SpotifyObjectTy
         .takeIfNotNullOrLog()?.let { artistJson ->
             Artist(
                 artistJson.id,
-                artistJson.name,
+                null //artistJson.name,
             )
         }
 }
