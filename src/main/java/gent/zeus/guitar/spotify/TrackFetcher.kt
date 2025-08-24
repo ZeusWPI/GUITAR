@@ -20,7 +20,7 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
                             Artist(
                                 artistJson.id,
                                 artistJson.name,
-                                null,
+                                artistJson.genres,
                             )
                         } ?: emptyList(),
                     )
