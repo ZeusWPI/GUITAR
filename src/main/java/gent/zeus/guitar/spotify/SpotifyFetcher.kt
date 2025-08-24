@@ -6,29 +6,26 @@ import gent.zeus.guitar.SPOTIFY_API_URL
 import gent.zeus.guitar.data.MusicalObject
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
 
 abstract class SpotifyFetcher<T : MusicalObject>(
-    private val id: String,
-    private val spotifyObjectType: SpotifyObjectType
+    protected val id: String,
+    protected val spotifyObjectType: SpotifyObjectType
 ) {
     abstract fun fetch(): T?
 
     // TODO handle http error 4xx
-    protected fun makeApiRequest(): RestClient.ResponseSpec =
+    protected inline fun <reified J : SpotifyJson> getSpotifyJson(): J? =
         REST_CLIENT.get()
             .uri("${SPOTIFY_API_URL}/${spotifyObjectType.apiUrlPrefix}/${id}")
             .header(HttpHeaders.AUTHORIZATION, "Bearer ${SpotifyToken.get()}")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-
-    protected fun <J : SpotifyJson> J?.takeIfNotNullOrLog() =
-        if (this == null) {
-            Logging.log.error("error fetching ${spotifyObjectType.typeString} with id ${id}: response body was null")
-            null
-        } else {
-            this
-        }
+            .body<J>()
+            ?: run {
+                Logging.log.error("error fetching ${spotifyObjectType.typeString} with id ${id}: response body was null")
+                null
+            }
 }
 
 enum class SpotifyObjectType(val apiUrlPrefix: String, val typeString: String) {
