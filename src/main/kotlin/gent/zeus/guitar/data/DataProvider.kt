@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class DataProvider(val trackStore: TrackStore) {
-    fun getTrack(id: String): Track? = trackStore.retrieve(id) ?: TrackFetcher(id).fetch()
+    fun getTrack(id: String): Track? =
+        trackStore.retrieve(id)
+            ?: TrackFetcher(id).fetch()?.also(trackStore::store)
 
     fun getAlbum(id: String): Album? = AlbumFetcher(id).fetch()
 
