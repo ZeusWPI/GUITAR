@@ -2,7 +2,7 @@ package gent.zeus.guitar.data
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-interface MusicalObject
+sealed interface MusicalObject
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Track(
