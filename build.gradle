@@ -33,6 +33,9 @@ dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
 
+    // -- mqtt --
+    implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
+
 }
 
 tasks.named('test') {

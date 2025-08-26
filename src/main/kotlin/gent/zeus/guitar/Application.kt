@@ -1,8 +1,6 @@
 package gent.zeus.guitar
 
-import com.fasterxml.jackson.databind.type.LogicalType
 import gent.zeus.guitar.spotify.SpotifyToken
-import org.apache.juli.logging.Log
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
