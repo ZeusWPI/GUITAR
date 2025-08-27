@@ -34,6 +34,7 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
                 )
             } ?: emptyList(),
             durationInMs = trackJson.durationMs,
+            imageUrl = trackJson.album?.images?.maxBy { imageJson -> imageJson.height }?.url,
             spotifyUrl = trackJson.externalUrls?.spotify,
         )
     }

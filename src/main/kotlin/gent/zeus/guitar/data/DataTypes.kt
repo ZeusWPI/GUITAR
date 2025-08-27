@@ -11,6 +11,7 @@ data class Track(
     val album: Album?,
     val artists: List<Artist>?,
     val durationInMs: Int?,
+    val imageUrl: String?,
     val spotifyUrl: String?
 ) : MusicalObject
 
