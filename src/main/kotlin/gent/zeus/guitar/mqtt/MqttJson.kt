@@ -10,7 +10,7 @@ internal data class MqttPlayingJson(
 internal data class MqttDetailJson(
     val name: String?,
     val album: String?,
-    val lengthInMs: Int?,
+    val durationInMs: Int?,
     val endsAt: Long?,
     val spotifyId: String,
     val imageUrl: String?,

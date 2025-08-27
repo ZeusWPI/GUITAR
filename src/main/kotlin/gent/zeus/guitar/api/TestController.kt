@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.view.RedirectView
-import java.util.Base64
+import java.util.*
 
 @RestController
 @RequestMapping("/test")
@@ -24,10 +24,10 @@ class TestController {
     fun saturn(@RequestParam password: String): HelloResponse {
         val encPassword = String(Base64.getEncoder().encode(password.toByteArray()))
         println(encPassword)
-        if (encPassword == "Y29yZG9uLWJsdWU=") {
-            return HelloResponse("Welcome to the cool zone 8)")
+        return if (encPassword == "Y29yZG9uLWJsdWU=") {
+            HelloResponse("Welcome to the cool zone 8)")
         } else {
-            return HelloResponse("You are not cool enough :(")
+            HelloResponse("You are not cool enough :(")
         }
     }
 

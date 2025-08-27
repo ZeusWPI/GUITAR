@@ -23,7 +23,7 @@ internal class MqttTrackDetailPublisher(client: MqttClient) : MqttPublisher(clie
             MqttDetailJson(
                 name = detailObj.name,
                 album = detailObj.album?.name,
-                lengthInMs = null, // TODO use correct value
+                durationInMs = detailObj.durationInMs,
                 endsAt = null,  // TODO provide end unix timestamp
                 spotifyId = detailObj.spotifyId,
                 imageUrl = null,  // TODO provide image url

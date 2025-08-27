@@ -1,7 +1,7 @@
 package gent.zeus.guitar
 
 fun interface StartupCheck {
-    fun checkOnStartup(): StartupCheckResult;
+    fun checkOnStartup(): StartupCheckResult
 }
 
 data class StartupCheckResult(

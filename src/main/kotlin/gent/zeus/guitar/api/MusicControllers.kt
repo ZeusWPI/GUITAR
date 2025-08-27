@@ -4,9 +4,6 @@ import gent.zeus.guitar.data.Album
 import gent.zeus.guitar.data.Artist
 import gent.zeus.guitar.data.DataProvider
 import gent.zeus.guitar.data.Track
-import gent.zeus.guitar.spotify.AlbumFetcher
-import gent.zeus.guitar.spotify.ArtistFetcher
-import gent.zeus.guitar.spotify.TrackFetcher
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
