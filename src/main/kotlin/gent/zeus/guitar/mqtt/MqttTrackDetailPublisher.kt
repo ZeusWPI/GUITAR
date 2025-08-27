@@ -24,7 +24,8 @@ internal class MqttTrackDetailPublisher(client: MqttClient) : MqttPublisher(clie
                 name = detailObj.name,
                 album = detailObj.album?.name,
                 durationInMs = detailObj.durationInMs,
-                endsAt = null,  // TODO provide end unix timestamp
+                startedAtMs = System.currentTimeMillis(),
+                endsAtMs = detailObj.durationInMs?.plus(System.currentTimeMillis()),
                 spotifyId = detailObj.spotifyId,
                 imageUrl = detailObj.imageUrl,
                 artists = detailObj.artists?.mapNotNull { artist -> artist.name } ?: emptyList(),
