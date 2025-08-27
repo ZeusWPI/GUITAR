@@ -33,6 +33,7 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
                     spotifyUrl = null,
                 )
             } ?: emptyList(),
+            durationInMs = trackJson.durationMs,
             spotifyUrl = trackJson.externalUrls?.spotify,
         )
     }

@@ -22,6 +22,7 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                             spotifyUrl = null,
                         )
                     } ?: emptyList(),
+                    durationInMs = null,
                     spotifyUrl = null,
                 )
             } ?: emptyList(),

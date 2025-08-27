@@ -10,6 +10,7 @@ data class Track(
     val name: String?,
     val album: Album?,
     val artists: List<Artist>?,
+    val durationInMs: Int?,
     val spotifyUrl: String?
 ) : MusicalObject
 
