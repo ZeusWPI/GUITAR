@@ -16,8 +16,20 @@ internal class MqttTrackDetailPublisher(client: MqttClient) : MqttPublisher(clie
     override fun publishTrackDetails(id: String) {
         Logging.log.info("mqtt: publishing details for track $id")
 
-        val obj = dataProvider.getTrack(id)
-        obj ?: return
-        this.publishObject(obj)
+        val detailObj = dataProvider.getTrack(id)
+        detailObj ?: return
+
+        val mqttDetailJson: MqttDetailJson = detailObj.let { detailObj ->
+            MqttDetailJson(
+                name = detailObj.name,
+                album = detailObj.album?.name,
+                lengthInMs = null, // TODO use correct value
+                endsAt = null,  // TODO provide end unix timestamp
+                spotifyId = detailObj.spotifyId,
+                imageUrl = null,  // TODO provide image url
+                artists = detailObj.artists?.mapNotNull { artist -> artist.name } ?: emptyList(),
+            )
+        }
+        this.publishObject(mqttDetailJson)
     }
 }
