@@ -1,11 +1,15 @@
 package gent.zeus.guitar.mqtt
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import gent.zeus.guitar.StartupCheck
 import gent.zeus.guitar.StartupCheckResult
+import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
@@ -42,8 +46,12 @@ private val MQTT_OPTIONS = MqttConnectOptions().apply {
 
 @Component
 class Mqtt : ApplicationRunner {
+
+    @Autowired
+    lateinit var mqttCallback: MqttCallback
+
     override fun run(args: ApplicationArguments?) {
-        MQTT_CLIENT.setCallback(MqttCallbackImpl())
+        MQTT_CLIENT.setCallback(mqttCallback)
         MQTT_CLIENT.connect(MQTT_OPTIONS)
         MQTT_CLIENT.subscribe(MqttEnv.TOPIC)
 
@@ -66,4 +74,11 @@ class Mqtt : ApplicationRunner {
             client.publish("music/guitar/answer", this)
         }
     }
+}
+
+
+internal fun convertToJsonMessage(obj: Any): MqttMessage = with(jacksonObjectMapper()) {
+    MqttMessage(
+        writeValueAsString(obj).toByteArray()
+    )
 }

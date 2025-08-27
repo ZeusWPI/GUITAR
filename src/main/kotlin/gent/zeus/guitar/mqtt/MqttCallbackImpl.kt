@@ -1,13 +1,19 @@
 package gent.zeus.guitar.mqtt
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import gent.zeus.guitar.Logging
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import org.springframework.stereotype.Component
 
-class MqttCallbackImpl : MqttCallback {
+
+@Component
+internal class MqttCallbackImpl(val publisher: MqttPublisher) : MqttCallback {
+
     init {
-        Logging.log.info("listening to mqtt on tcp://${System.getenv("MQTT_SERVER_URL")}:${System.getenv("MQTT_SERVER_PORT")}")
+        Logging.log.info("listening to mqtt on tcp://${MqttEnv.URL}:${MqttEnv.PORT}")
     }
 
     override fun connectionLost(cause: Throwable?) {
@@ -15,10 +21,18 @@ class MqttCallbackImpl : MqttCallback {
     }
 
     override fun messageArrived(topic: String?, message: MqttMessage?) {
-        Logging.log.info("message received !!!! hyayy")
+        message ?: return
+        val playingJson: MqttPlayingJson = with(jacksonObjectMapper()) {
+            readValue(
+                String(message.payload)
+            )
+        }
+
+        publisher.publishTrackDetails(playingJson.trackId)
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken?) {
         TODO("Not yet implemented")
     }
 }
+

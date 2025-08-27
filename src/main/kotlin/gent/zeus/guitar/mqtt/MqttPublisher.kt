@@ -1,5 +1,5 @@
 package gent.zeus.guitar.mqtt
 
-
-class MqttPublisher {
+interface MqttPublisher {
+    fun publishTrackDetails(id: String)
 }
