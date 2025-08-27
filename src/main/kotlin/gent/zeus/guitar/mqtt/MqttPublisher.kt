@@ -11,8 +11,11 @@ internal abstract class MqttPublisher(val mqttClient: MqttClient) {
     fun publishObject(obj: Any) {
         val mapper = jacksonObjectMapper()
         val message = MqttMessage(
-            mapper.writeValueAsString(obj).toByteArray()
-        )
+            mapper.writeValueAsString(obj).toByteArray(),
+        ).apply {
+            qos = 1
+            isRetained = true
+        }
         mqttClient.publish(MqttEnv.PUBLISH_TOPIC, message)
     }
 }
