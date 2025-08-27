@@ -32,7 +32,5 @@ internal class MqttCallbackImpl(val publisher: MqttPublisher) : MqttCallback {
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken?) {
-        TODO("Not yet implemented")
     }
 }
-
