@@ -1,8 +1,10 @@
 package gent.zeus.guitar.mqtt
 
+import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import gent.zeus.guitar.Logging
+import org.apache.juli.logging.Log
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -22,13 +24,19 @@ internal class MqttCallbackImpl(val publisher: MqttPublisher) : MqttCallback {
 
     override fun messageArrived(topic: String?, message: MqttMessage?) {
         message ?: return
-        val playingJson: MqttPlayingJson = with(jacksonObjectMapper()) {
-            readValue(
-                String(message.payload)
-            )
-        }
+        try {
+            val playingJson: MqttPlayingJson = with(jacksonObjectMapper()) {
+                readValue(
+                    String(message.payload)
+                )
+            }
 
-        publisher.publishTrackDetails(playingJson.trackId)
+            publisher.publishTrackDetails(playingJson.trackId)
+        } catch (e: JsonParseException) {
+            Logging.log.warn("mqtt: error decoding json: ${e.message}")
+        } catch (e: Exception) {
+            Logging.log.warn("mqtt: error: ${e.message}")
+        }
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken?) {
