@@ -6,10 +6,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import gent.zeus.guitar.Logging
 import gent.zeus.guitar.data.DataProvider
 import gent.zeus.guitar.db.InMemoryTrackStore
-import org.apache.juli.logging.Log
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
-import java.util.*
 
 class MqttCallbackClient : MqttCallback {
 

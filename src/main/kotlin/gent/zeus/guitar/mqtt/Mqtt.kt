@@ -5,7 +5,7 @@ import gent.zeus.guitar.StartupCheckResult
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
-import java.util.UUID
+import java.util.*
 
 
 internal object MqttEnv : StartupCheck {
