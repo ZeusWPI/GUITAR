@@ -62,7 +62,7 @@ class MqttCallbackClient : MqttCallback {
         }
         playingJson ?: return
 
-        publisher.publishTrackDetails(playingJson.trackId)
+        publisher.publishTrackDetails(playingJson.trackId, playingJson.positionMs)
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken?) {

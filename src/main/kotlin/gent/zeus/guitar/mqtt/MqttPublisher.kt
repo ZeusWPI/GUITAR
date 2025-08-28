@@ -6,8 +6,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
 internal abstract class MqttPublisher(val mqttClient: MqttClient) {
-    abstract fun publishTrackDetails(id: String)
-
     fun publishObject(obj: Any) {
         val mapper = jacksonObjectMapper()
         val message = MqttMessage(
