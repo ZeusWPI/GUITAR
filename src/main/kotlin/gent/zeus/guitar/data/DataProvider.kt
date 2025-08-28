@@ -1,5 +1,6 @@
 package gent.zeus.guitar.data
 
+import gent.zeus.guitar.db.InMemoryTrackStore
 import gent.zeus.guitar.db.TrackStore
 import gent.zeus.guitar.spotify.AlbumFetcher
 import gent.zeus.guitar.spotify.ArtistFetcher
@@ -7,7 +8,9 @@ import gent.zeus.guitar.spotify.TrackFetcher
 import org.springframework.stereotype.Component
 
 @Component
-class DataProvider(val trackStore: TrackStore) {
+class DataProvider {
+    val trackStore: TrackStore = InMemoryTrackStore()
+
     fun getTrack(id: String): Track? =
         trackStore.retrieve(id)
             ?: TrackFetcher(id).fetch()?.also(trackStore::store)

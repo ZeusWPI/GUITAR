@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component
 private val trackStorage: MutableMap<String, Track> = mutableMapOf()
 
 
-@Component
 class InMemoryTrackStore : TrackStore {
     override fun store(track: Track) {
         trackStorage[track.spotifyId] = track
