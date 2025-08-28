@@ -45,7 +45,7 @@ private class MqttClientProvider {
     @Bean
     fun mqttClient(): MqttClient = MqttClient(
         "tcp://${MqttEnv.URL}:${MqttEnv.PORT}",
-        UUID.randomUUID().toString(),
+        "GUITAR-" + UUID.randomUUID().toString(),
         MemoryPersistence(),
     )
 }
