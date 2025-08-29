@@ -1,7 +1,7 @@
 package gent.zeus.guitar.data
 
-import gent.zeus.guitar.db.InMemoryTrackStore
-import gent.zeus.guitar.db.TrackStore
+import gent.zeus.guitar.storage.InMemoryTrackStore
+import gent.zeus.guitar.storage.TrackStore
 import gent.zeus.guitar.spotify.AlbumFetcher
 import gent.zeus.guitar.spotify.ArtistFetcher
 import gent.zeus.guitar.spotify.TrackFetcher

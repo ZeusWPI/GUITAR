@@ -1,8 +1,7 @@
-package gent.zeus.guitar.db
+package gent.zeus.guitar.storage
 
 import gent.zeus.guitar.Logging
 import gent.zeus.guitar.data.Track
-import org.springframework.stereotype.Component
 
 
 private val trackStorage: MutableMap<String, Track> = mutableMapOf()

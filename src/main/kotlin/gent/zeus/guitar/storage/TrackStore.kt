@@ -1,4 +1,4 @@
-package gent.zeus.guitar.db
+package gent.zeus.guitar.storage
 
 import gent.zeus.guitar.data.Track
 
