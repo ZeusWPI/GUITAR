@@ -11,8 +11,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
 class MqttCallbackClient : MqttCallback {
 
-    private val trackStore = InMemoryTrackStore()
-    private val dataProvider = DataProvider(trackStore)
+    private val dataProvider = DataProvider()
 
     private var mqttClient: MqttClient = MqttClient(
         "tcp://${MqttEnv.URL}:${MqttEnv.PORT}",
@@ -30,12 +29,21 @@ class MqttCallbackClient : MqttCallback {
         connectionTimeout = 10
     }
 
+    init {
+        Thread(
+            MqttDefibrillator(this),
+            "mqtt-defibrillator"
+        ).start()
+    }
+
     fun connect() {
         Logging.log.info("mqtt: connecting...")
         mqttClient.connect(mqttOptions)
         mqttClient.subscribe(MqttEnv.LISTEN_TOPIC)
         Logging.log.info("mqtt: connected to ${MqttEnv.hostString} with id ${MqttEnv.clientId}")
     }
+
+    val isConnected get() = mqttClient.isConnected
 
     override fun connectionLost(cause: Throwable?) {
         Logging.log.warn("mqtt: connection lost, reconnecting...", cause)
