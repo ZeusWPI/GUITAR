@@ -3,9 +3,11 @@ package gent.zeus.guitar.spotify
 import gent.zeus.guitar.data.Album
 import gent.zeus.guitar.data.Artist
 import gent.zeus.guitar.data.Track
+import gent.zeus.guitar.votes.VoteFetcher
 
 class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRACK) {
     override fun fetch(): Track? = getSpotifyJson<SpotifyTrackJson>()?.let { trackJson ->
+        val voteCount = VoteFetcher.getVotes(trackJson.id)
         Track(
             spotifyId = trackJson.id,
             name = trackJson.name,
@@ -36,6 +38,8 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
             durationInMs = trackJson.durationMs,
             imageUrl = trackJson.album?.images?.maxBy { imageJson -> imageJson.height }?.url,
             spotifyUrl = trackJson.externalUrls?.spotify,
+            votesFor = voteCount.votesFor,
+            votesAgainst = voteCount.votesAgainst,
         )
     }
 }

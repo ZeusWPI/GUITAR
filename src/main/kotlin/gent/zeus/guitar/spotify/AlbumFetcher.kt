@@ -25,6 +25,8 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                     durationInMs = null,
                     imageUrl = null,
                     spotifyUrl = null,
+                    votesFor = null,
+                    votesAgainst = null,
                 )
             } ?: emptyList(),
             artists = albumJson.artists?.map { artistJson ->

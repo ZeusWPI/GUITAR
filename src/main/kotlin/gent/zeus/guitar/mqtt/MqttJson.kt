@@ -16,4 +16,6 @@ internal data class MqttDetailJson(
     val spotifyId: String,
     val imageUrl: String?,
     val artists: List<String>,
+    val votesFor: Int?,
+    val votesAgainst: Int?,
 )

@@ -24,7 +24,7 @@ internal object MqttEnv : StartupCheck {
 
         return StartupCheckResult(
             passed,
-            "MQTT_SERVER URL, MQTT_SERVER_PORT and/or MQTT_LISTEN_TOPIC environment variable not set!"
+            "MQTT_SERVER_URL, MQTT_SERVER_PORT, MQTT_PUBLISH_TOPIC and/or MQTT_LISTEN_TOPIC environment variable not set!"
                 .takeUnless { passed },
         )
     }
