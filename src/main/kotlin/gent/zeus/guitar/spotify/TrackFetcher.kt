@@ -7,7 +7,7 @@ import gent.zeus.guitar.votes.VoteFetcher
 
 class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRACK) {
     override fun fetch(): Track? = getSpotifyJson<SpotifyTrackJson>()?.let { trackJson ->
-        val voteCount = VoteFetcher.getVotes(trackJson.id)
+        val voteCount = VoteFetcher().getVotes(trackJson.id)  // TODO: inject this somewhere else
         Track(
             spotifyId = trackJson.id,
             name = trackJson.name,

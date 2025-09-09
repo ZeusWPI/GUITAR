@@ -7,19 +7,17 @@ import org.springframework.http.MediaType
 import org.springframework.web.client.body
 
 class VoteFetcher {
-    data class VoteCount(val songId: String, val votesFor: Int, val votesAgainst: Int) {}
+    data class VoteCount(val songId: String, val votesFor: Int, val votesAgainst: Int)
 
-    companion object {
-        fun getVotes(spotifyId: String): VoteCount {
-            return REST_CLIENT.get()
-                .uri("${ZODOM_API_URL}/vote_count/$spotifyId")
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .body<VoteCount>()
-                ?: run {
-                    Logging.log.error("error fetching votes for ${spotifyId}: response body was null")
-                    VoteCount(spotifyId, 0, 0)
-                }
-        }
+    fun getVotes(spotifyId: String): VoteCount {
+        return REST_CLIENT.get()
+            .uri("${ZODOM_API_URL}/vote_count/$spotifyId")
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .body<VoteCount>()
+            ?: run {
+                Logging.log.error("error fetching votes for ${spotifyId}: response body was null")
+                VoteCount(spotifyId, 0, 0)
+            }
     }
 }
