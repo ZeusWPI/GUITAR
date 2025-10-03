@@ -19,3 +19,9 @@ internal data class MqttDetailJson(
     val votesFor: Int?,
     val votesAgainst: Int?,
 )
+
+internal data class MqttVoteJson(
+    val songId: String?,
+    val votesFor: Int?,
+    val votesAgainst: Int?,
+)

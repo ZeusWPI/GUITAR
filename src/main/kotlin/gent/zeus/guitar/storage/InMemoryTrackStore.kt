@@ -16,4 +16,8 @@ class InMemoryTrackStore : TrackStore {
     override fun retrieve(id: String): Track? = trackStorage[id]?.also {
         Logging.log.info("retrieved track from in memory db: ${it.spotifyId}")
     }
+
+    override fun delete(id: String) {
+        trackStorage.remove(id)
+    }
 }

@@ -11,15 +11,16 @@ import java.util.*
 internal object MqttEnv : StartupCheck {
     val URL: String? = System.getenv("MQTT_SERVER_URL")
     val PORT: String? = System.getenv("MQTT_SERVER_PORT")
-    val LISTEN_TOPIC: String? = System.getenv("MQTT_LISTEN_TOPIC")
-    val PUBLISH_TOPIC: String? = System.getenv("MQTT_PUBLISH_TOPIC")
+    val LIBRESPOT_LISTEN_TOPIC: String = System.getenv("MQTT_LIBRESPOT_LISTEN_TOPIC")
+    val ZODOM_LISTEN_TOPIC: String = System.getenv("MQTT_ZODOM_LISTEN_TOPIC")
+    val PUBLISH_TOPIC: String = System.getenv("MQTT_PUBLISH_TOPIC")
 
     val hostString: String get() = "tcp://$URL:$PORT"
     val clientId = "GUITAR-" + UUID.randomUUID().toString()
 
     override fun checkOnStartup(): StartupCheckResult {
         val passed = with(MqttEnv) {
-            URL != null && PORT != null && LISTEN_TOPIC != null && PUBLISH_TOPIC != null
+            listOf(URL, PORT, LIBRESPOT_LISTEN_TOPIC, ZODOM_LISTEN_TOPIC, PUBLISH_TOPIC).all { it != null }
         }
 
         return StartupCheckResult(
@@ -37,6 +38,6 @@ class Mqtt : ApplicationRunner {
     private val client = MqttCallbackClient()
 
     override fun run(args: ApplicationArguments?) {
-        client.connect()
+        client.connect(MqttEnv.LIBRESPOT_LISTEN_TOPIC, MqttEnv.ZODOM_LISTEN_TOPIC)
     }
 }

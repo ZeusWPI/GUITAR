@@ -15,6 +15,10 @@ class DataProvider {
         trackStore.retrieve(id)
             ?: TrackFetcher(id).fetch()?.also(trackStore::store)
 
+    fun removeTrack(id: String) {
+        trackStore.delete(id)
+    }
+
     fun getAlbum(id: String): Album? = AlbumFetcher(id).fetch()
 
     fun getArtist(id: String): Artist? = ArtistFetcher(id).fetch()
