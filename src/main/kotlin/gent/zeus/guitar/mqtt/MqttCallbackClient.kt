@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import gent.zeus.guitar.Logging
 import gent.zeus.guitar.data.DataProvider
-import gent.zeus.guitar.storage.InMemoryTrackStore
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
@@ -13,7 +12,7 @@ class MqttCallbackClient : MqttCallback {
 
     private val dataProvider = DataProvider()
 
-    private var mqttClient: MqttClient = MqttClient(
+    private val mqttClient: MqttClient = MqttClient(
         "tcp://${MqttEnv.URL}:${MqttEnv.PORT}",
         MqttEnv.clientId,
         MemoryPersistence(),
@@ -36,10 +35,10 @@ class MqttCallbackClient : MqttCallback {
         ).start()
     }
 
-    fun connect() {
+    fun connect(vararg topics: String) {
         Logging.log.info("mqtt: connecting...")
         mqttClient.connect(mqttOptions)
-        mqttClient.subscribe(MqttEnv.LISTEN_TOPIC)
+        topics.forEach { mqttClient.subscribe(it) }
         Logging.log.info("mqtt: connected to ${MqttEnv.hostString} with id ${MqttEnv.clientId}")
     }
 
@@ -53,24 +52,56 @@ class MqttCallbackClient : MqttCallback {
     override fun messageArrived(topic: String?, message: MqttMessage?) {
         Logging.log.info("mqtt: received message on $topic")
         message ?: return
-        val playingJson = try {
-            val playingJson: MqttPlayingJson = with(jacksonObjectMapper()) {
-                readValue(
-                    String(message.payload)
-                )
-            }
-            playingJson
+        when (topic) {
+            MqttEnv.LIBRESPOT_LISTEN_TOPIC -> handleLibrespotMessage(message)
+            MqttEnv.ZODOM_LISTEN_TOPIC -> handleZodomMessage(message)
+        }
+    }
 
+    private var currentSong: MqttPlayingJson? = null
+
+    private fun handleLibrespotMessage(message: MqttMessage) {
+        val playingJson = try {
+            val playingJson: MqttPlayingJson = jacksonObjectMapper().readValue(String(message.payload))
+            playingJson
         } catch (e: JsonParseException) {
-            Logging.log.warn("mqtt: error decoding json: ${e.message}")
+            Logging.log.warn("mqtt: error decoding playing json: ${e.message}")
             null
         } catch (e: Exception) {
-            Logging.log.warn("mqtt: error: ${e.message}")
+            Logging.log.warn("mqtt: error handling Librespot message: ${e.message}")
             null
         }
         playingJson ?: return
 
-        publisher.publishTrackDetails(playingJson.trackId, playingJson.positionMs)
+        currentSong = playingJson
+        sendCurrentSongData()
+    }
+
+    private fun sendCurrentSongData() {
+        currentSong?.let {  // doing it like this to prevent concurrency warnings
+            publisher.publishTrackDetails(it.trackId, it.positionMs)
+        }
+    }
+
+    /**
+     * removes a track from the cache when someone votes on it
+     * TODO: change this behaviour
+     */
+    private fun handleZodomMessage(message: MqttMessage) {
+        val votesJson = try {
+            val votesJson: MqttVoteJson = jacksonObjectMapper().readValue(String(message.payload))
+            votesJson
+        } catch (e: JsonParseException) {
+            Logging.log.warn("mqtt: error decoding votes json: ${e.message}")
+            null
+        } catch (e: Exception) {
+            Logging.log.warn("mqtt: error error handling Zodom message: ${e.message}")
+            null
+        }
+        votesJson?.songId ?: return
+
+        dataProvider.removeTrack(votesJson.songId)
+        sendCurrentSongData()
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken?) {

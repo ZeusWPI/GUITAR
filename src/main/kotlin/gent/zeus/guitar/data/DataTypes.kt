@@ -12,7 +12,9 @@ data class Track(
     val artists: List<Artist>?,
     val durationInMs: Int?,
     val imageUrl: String?,
-    val spotifyUrl: String?
+    val spotifyUrl: String?,
+    val votesFor: Int?,
+    val votesAgainst: Int?,
 ) : MusicalObject
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

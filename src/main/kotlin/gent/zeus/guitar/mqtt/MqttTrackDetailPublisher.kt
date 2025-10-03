@@ -23,6 +23,8 @@ internal class MqttTrackDetailPublisher(client: MqttClient, val dataProvider: Da
                 spotifyId = detailObj.spotifyId,
                 imageUrl = detailObj.imageUrl,
                 artists = detailObj.artists?.mapNotNull { artist -> artist.name } ?: emptyList(),
+                votesFor = detailObj.votesFor,
+                votesAgainst = detailObj.votesAgainst,
             )
         }
         this.publishObject(mqttDetailJson)
