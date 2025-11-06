@@ -6,30 +6,30 @@ sealed interface MusicalObject
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Track(
-    val spotifyId: String,
-    val name: String?,
-    val album: Album?,
-    val artists: List<Artist>?,
-    val durationInMs: Int?,
-    val imageUrl: String?,
-    val spotifyUrl: String?,
-    val votesFor: Int?,
-    val votesAgainst: Int?,
+    var spotifyId: String,
+    var name: String?,
+    var album: Album?,
+    var artists: List<Artist>?,
+    var durationInMs: Int?,
+    var imageUrl: String?,
+    var spotifyUrl: String?,
+    var votesFor: Int?,
+    var votesAgainst: Int?,
 ) : MusicalObject
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Artist(
-    val spotifyId: String,
-    val name: String?,
-    val genres: List<String>?,
-    val spotifyUrl: String?
+    var spotifyId: String,
+    var name: String?,
+    var genres: List<String>?,
+    var spotifyUrl: String?
 ) : MusicalObject
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Album(
-    val spotifyId: String,
-    val name: String?,
-    val tracks: List<Track>?,
-    val artists: List<Artist>?,
-    val spotifyUrl: String?
+    var spotifyId: String,
+    var name: String?,
+    var tracks: List<Track>?,
+    var artists: List<Artist>?,
+    var spotifyUrl: String?
 ) : MusicalObject
