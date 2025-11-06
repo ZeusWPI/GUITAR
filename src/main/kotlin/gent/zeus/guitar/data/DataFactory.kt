@@ -1,0 +1,39 @@
+package gent.zeus.guitar.data
+
+import gent.zeus.guitar.DataFetchError
+import gent.zeus.guitar.DoubleErrorLists
+import gent.zeus.guitar.Logging
+import gent.zeus.guitar.logErrors
+import gent.zeus.guitar.spotify.SpotifyFetcher
+
+class DataFactory {
+    fun getTrack(spotifyId: String): Track = Track(spotifyId).let {
+        fillObject(it)
+        v
+    }
+
+    /**
+     * fills the given musical object with data using the given data fillers. will modify the object.
+     * @param musicalObject the object to fill
+     * @param importantDataFillers data fillers to fill the object with. if one of these gives an error, it will be
+     * added to the important errors list
+     * @param unimportantDataFillers data fillers to fill the object with. if one of these gives an error, it will be
+     * added to the unimportant errors list
+     * @param logErrors: log errors in console
+     * @return a list of errors that were caused (will be empty if there were no errors)
+     */
+    private fun <T : MusicalObject> fillObject(
+        musicalObject: T,
+        importantDataFillers: Collection<SpotifyFetcher<T>>,
+        unimportantDataFillers: Collection<SpotifyFetcher<T>>,
+        logErrors: Boolean = true
+    ): DoubleErrorLists = DoubleErrorLists(
+        important = importantDataFillers
+            .mapNotNull { it.fetchInto(musicalObject) }
+            .logErrors("important error fetching data:")
+            .fil
+        unimportant = unimportantDataFillers
+            .mapNotNull { it.fetchInto(musicalObject) }
+            .logErrors("unimportant error fetching data:")
+    )
+}

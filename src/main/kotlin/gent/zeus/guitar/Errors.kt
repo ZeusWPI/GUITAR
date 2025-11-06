@@ -24,3 +24,17 @@ sealed class DataResult<T> {
     data class DataSuccess<T>(val value: T) : DataResult<T>()
     data class DataError<E : DataFetchError, T>(val error: E) : DataResult<T>()
 }
+
+data class DoubleErrorLists(
+    val important: List<DataFetchError>,
+    val unimportant: List<DataFetchError>,
+)
+
+/**
+ * log all the errors in the list
+ * @param pre: bit to put before the error message
+ */
+fun <E : DataFetchError> Iterable<E>.logErrors(pre: String) = map {
+    Logging.log.error("$pre ${it.message} (${it.httpStatusCode})")
+    it
+}
