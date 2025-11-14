@@ -101,7 +101,8 @@ class MqttCallbackClient : MqttCallback {
         votesJson?.songId ?: return
 
         dataProvider.removeTrack(votesJson.songId)
-        sendCurrentSongData()
+        // sendCurrentSongData()
+        // TODO: ↑ enable again
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken?) {
