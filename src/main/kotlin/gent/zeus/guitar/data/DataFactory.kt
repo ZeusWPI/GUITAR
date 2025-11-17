@@ -1,10 +1,10 @@
 package gent.zeus.guitar.data
 
 import gent.zeus.guitar.DoubleErrorLists
+import gent.zeus.guitar.ext.DataFiller
 import gent.zeus.guitar.logErrors
 import gent.zeus.guitar.spotify.AlbumFetcher
 import gent.zeus.guitar.spotify.ArtistFetcher
-import gent.zeus.guitar.spotify.SpotifyFetcher
 import gent.zeus.guitar.spotify.TrackFetcher
 
 class DataFactory {
@@ -50,8 +50,8 @@ class DataFactory {
      */
     private fun <T : MusicalObject> fillObject(
         musicalObject: T,
-        importantDataFillers: Collection<SpotifyFetcher<T>>,
-        unimportantDataFillers: Collection<SpotifyFetcher<T>>,
+        importantDataFillers: Collection<DataFiller<T>>,
+        unimportantDataFillers: Collection<DataFiller<T>>,
         logErrors: Boolean = true
     ): DoubleErrorLists = DoubleErrorLists(
         important = importantDataFillers
