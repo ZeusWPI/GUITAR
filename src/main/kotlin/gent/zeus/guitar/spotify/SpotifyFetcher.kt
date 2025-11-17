@@ -2,16 +2,15 @@ package gent.zeus.guitar.spotify
 
 import gent.zeus.guitar.*
 import gent.zeus.guitar.data.MusicalObject
+import gent.zeus.guitar.ext.DataFiller
 
 abstract class SpotifyFetcher<T : MusicalObject>(
     protected val id: String,
     protected val spotifyObjectType: SpotifyObjectType
-) {
+) : DataFiller<T> {
     /**
      * fetch data and put it in the given MusicalObject
      */
-    abstract fun fetchInto(musicalObject: T): DataFetchError?
-
     // TODO handle http error 4xx
     protected inline fun <reified J : SpotifyJson> getSpotifyJson(): DataResult<J> =
         with(
