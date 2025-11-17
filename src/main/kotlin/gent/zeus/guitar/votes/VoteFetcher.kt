@@ -1,9 +1,9 @@
 package gent.zeus.guitar.votes
 
-import gent.zeus.guitar.Logging
 import gent.zeus.guitar.REST_CLIENT
 import gent.zeus.guitar.StartupCheck
 import gent.zeus.guitar.StartupCheckResult
+import gent.zeus.guitar.logger
 import org.springframework.http.MediaType
 import org.springframework.web.client.body
 
@@ -30,7 +30,7 @@ class VoteFetcher {
             .retrieve()
             .body<VoteCount>()
             ?: run {
-                Logging.log.error("error fetching votes for ${spotifyId}: response body was null")
+                logger.error("error fetching votes for ${spotifyId}: response body was null")
                 VoteCount(spotifyId, 0, 0)
             }
     }

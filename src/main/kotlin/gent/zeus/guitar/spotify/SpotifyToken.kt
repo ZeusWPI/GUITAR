@@ -3,10 +3,10 @@ package gent.zeus.guitar.spotify
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import gent.zeus.guitar.Logging
 import gent.zeus.guitar.REST_CLIENT
 import gent.zeus.guitar.StartupCheck
 import gent.zeus.guitar.StartupCheckResult
+import gent.zeus.guitar.logger
 import org.springframework.http.MediaType
 import org.springframework.web.client.body
 
@@ -30,9 +30,9 @@ object SpotifyToken : StartupCheck {
         .body<SpotifyAccessToken>()
         .also {
             if (it == null) {
-                Logging.log.error("could not acquire spotify api token!")
+                logger.error("could not acquire spotify api token!")
             } else {
-                Logging.log.info("got new spotify api token, valid for ${it.expiresIn} seconds")
+                logger.info("got new spotify api token, valid for ${it.expiresIn} seconds")
             }
         }
 
@@ -49,7 +49,7 @@ object SpotifyToken : StartupCheck {
         private val _token = token
         val token: String?
             get() = if (System.currentTimeMillis() / 1000 > expiryTime - 60) {
-                Logging.log.info("spotify token cache expired")
+                logger.info("spotify token cache expired")
                 null
             } else {
                 _token

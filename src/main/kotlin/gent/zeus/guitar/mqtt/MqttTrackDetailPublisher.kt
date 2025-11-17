@@ -1,14 +1,14 @@
 package gent.zeus.guitar.mqtt
 
-import gent.zeus.guitar.Logging
 import gent.zeus.guitar.data.DataProvider
+import gent.zeus.guitar.logger
 import org.eclipse.paho.client.mqttv3.MqttClient
 
 
 internal class MqttTrackDetailPublisher(client: MqttClient, val dataProvider: DataProvider) : MqttPublisher(client) {
 
     fun publishTrackDetails(id: String, startMs: Int) {
-        Logging.log.info("mqtt: publishing details for track $id")
+        logger.info("mqtt: publishing details for track $id")
 
         val detailObj = dataProvider.getTrack(id)
         detailObj ?: return

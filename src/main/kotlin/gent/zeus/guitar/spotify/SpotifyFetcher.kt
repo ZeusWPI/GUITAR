@@ -23,7 +23,7 @@ abstract class SpotifyFetcher<T : MusicalObject>(
                 200 if body != null -> DataResult.DataSuccess(body!!)
                 404 -> DataResult.DataError(TrackNotFoundError())
                 else -> DataResult.DataError<_, J>(SpotifyError()).also {
-                    Logging.log.error("error fetching ${spotifyObjectType.typeString} with id $id: $it")
+                    logger.debug("error fetching {} with id {}: {}", spotifyObjectType.typeString, id, it)
                 }
             }
         }
@@ -35,7 +35,7 @@ abstract class SpotifyFetcher<T : MusicalObject>(
         .retrieve()
         .body<J>()
         ?: run {
-            Logging.log.error("error fetching ${spotifyObjectType.typeString} with id ${id}: response body was null")
+            logger.error("error fetching ${spotifyObjectType.typeString} with id ${id}: response body was null")
             null
         }
 

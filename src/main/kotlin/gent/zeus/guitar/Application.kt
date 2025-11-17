@@ -21,18 +21,18 @@ fun main(args: Array<String>) {
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class DoStartupChecks : CommandLineRunner {
-
+    //TODO despringify
     private val checklist: List<StartupCheck> = listOf(
         SpotifyToken,
         MqttEnv,
     )
 
     override fun run(vararg args: String?) {
-        Logging.log.info("running startup checks...")
+        logger.info("running startup checks...")
 
         checklist.map { it.checkOnStartup() }.map {
             if (!it.checkPassed) {
-                Logging.log.error(it.message)
+                logger.error(it.message)
             }
             it
         }.let { checklist ->
@@ -41,6 +41,6 @@ class DoStartupChecks : CommandLineRunner {
             }
         }
 
-        Logging.log.info("startup checks complete!")
+        logger.info("startup checks complete!")
     }
 }

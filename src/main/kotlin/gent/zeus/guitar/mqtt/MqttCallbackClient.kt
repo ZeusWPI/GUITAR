@@ -3,8 +3,8 @@ package gent.zeus.guitar.mqtt
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import gent.zeus.guitar.Logging
 import gent.zeus.guitar.data.DataProvider
+import gent.zeus.guitar.logger
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
@@ -36,21 +36,21 @@ class MqttCallbackClient : MqttCallback {
     }
 
     fun connect(vararg topics: String) {
-        Logging.log.info("mqtt: connecting...")
+        logger.info("mqtt: connecting...")
         mqttClient.connect(mqttOptions)
         topics.forEach { mqttClient.subscribe(it) }
-        Logging.log.info("mqtt: connected to ${MqttEnv.hostString} with id ${MqttEnv.clientId}")
+        logger.info("mqtt: connected to ${MqttEnv.hostString} with id ${MqttEnv.clientId}")
     }
 
     val isConnected get() = mqttClient.isConnected
 
     override fun connectionLost(cause: Throwable?) {
-        Logging.log.warn("mqtt: connection lost, reconnecting...", cause)
+        logger.warn("mqtt: connection lost, reconnecting...", cause)
         connect()
     }
 
     override fun messageArrived(topic: String?, message: MqttMessage?) {
-        Logging.log.info("mqtt: received message on $topic")
+        logger.info("mqtt: received message on $topic")
         message ?: return
         when (topic) {
             MqttEnv.LIBRESPOT_LISTEN_TOPIC -> handleLibrespotMessage(message)
@@ -65,10 +65,10 @@ class MqttCallbackClient : MqttCallback {
             val playingJson: MqttPlayingJson = jacksonObjectMapper().readValue(String(message.payload))
             playingJson
         } catch (e: JsonParseException) {
-            Logging.log.warn("mqtt: error decoding playing json: ${e.message}")
+            logger.warn("mqtt: error decoding playing json: ${e.message}")
             null
         } catch (e: Exception) {
-            Logging.log.warn("mqtt: error handling Librespot message: ${e.message}")
+            logger.warn("mqtt: error handling Librespot message: ${e.message}")
             null
         }
         playingJson ?: return
@@ -92,10 +92,10 @@ class MqttCallbackClient : MqttCallback {
             val votesJson: MqttVoteJson = jacksonObjectMapper().readValue(String(message.payload))
             votesJson
         } catch (e: JsonParseException) {
-            Logging.log.warn("mqtt: error decoding votes json: ${e.message}")
+            logger.warn("mqtt: error decoding votes json: ${e.message}")
             null
         } catch (e: Exception) {
-            Logging.log.warn("mqtt: error error handling Zodom message: ${e.message}")
+            logger.warn("mqtt: error error handling Zodom message: ${e.message}")
             null
         }
         votesJson?.songId ?: return

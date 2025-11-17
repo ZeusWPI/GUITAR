@@ -35,6 +35,6 @@ data class DoubleErrorLists(
  * @param pre: bit to put before the error message
  */
 fun <E : DataFetchError> Iterable<E>.logErrors(pre: String) = map {
-    Logging.log.error("$pre ${it.message} (${it.httpStatusCode})")
+    logger.error("$pre ${it.message} (${it.httpStatusCode})")
     it
 }
