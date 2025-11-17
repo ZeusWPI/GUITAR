@@ -3,9 +3,9 @@ package gent.zeus.guitar.data
 import gent.zeus.guitar.DoubleErrorLists
 import gent.zeus.guitar.ext.DataFiller
 import gent.zeus.guitar.logErrors
-import gent.zeus.guitar.spotify.AlbumFetcher
-import gent.zeus.guitar.spotify.ArtistFetcher
-import gent.zeus.guitar.spotify.TrackFetcher
+import gent.zeus.guitar.ext.spotify.AlbumFetcher
+import gent.zeus.guitar.ext.spotify.ArtistFetcher
+import gent.zeus.guitar.ext.spotify.TrackFetcher
 
 class DataFactory {
     fun getTrack(spotifyId: String): Track = Track(spotifyId).also {

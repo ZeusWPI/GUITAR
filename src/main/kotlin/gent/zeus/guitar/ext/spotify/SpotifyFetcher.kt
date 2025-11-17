@@ -1,4 +1,4 @@
-package gent.zeus.guitar.spotify
+package gent.zeus.guitar.ext.spotify
 
 import gent.zeus.guitar.*
 import gent.zeus.guitar.data.MusicalObject

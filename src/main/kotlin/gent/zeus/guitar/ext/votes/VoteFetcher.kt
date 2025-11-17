@@ -1,4 +1,4 @@
-package gent.zeus.guitar.votes
+package gent.zeus.guitar.ext.votes
 
 import gent.zeus.guitar.REST_CLIENT
 import gent.zeus.guitar.StartupCheck
