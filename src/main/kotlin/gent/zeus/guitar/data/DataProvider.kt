@@ -9,17 +9,20 @@ import org.springframework.stereotype.Component
 
 @Component
 class DataProvider {
+    val dataFactory = DataFactory()
+
+    // TODO: don't implement this as spring component
     val trackStore: TrackStore = InMemoryTrackStore()
 
-    fun getTrack(id: String): Track? =
+    fun getTrack(id: String): Track =
         trackStore.retrieve(id)
-            ?: TrackFetcher(id).fetch()?.also(trackStore::store)
+            ?: dataFactory.getTrack(id)
 
     fun removeTrack(id: String) {
         trackStore.delete(id)
     }
 
-    fun getAlbum(id: String): Album? = AlbumFetcher(id).fetch()
+//    fun getAlbum(id: String): Album? = AlbumFetcher(id).fetch()
 
-    fun getArtist(id: String): Artist? = ArtistFetcher(id).fetch()
+//    fun getArtist(id: String): Artist? = ArtistFetcher(id).fetch()
 }

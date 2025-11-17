@@ -5,11 +5,17 @@ import gent.zeus.guitar.DoubleErrorLists
 import gent.zeus.guitar.Logging
 import gent.zeus.guitar.logErrors
 import gent.zeus.guitar.spotify.SpotifyFetcher
+import gent.zeus.guitar.spotify.TrackFetcher
 
 class DataFactory {
-    fun getTrack(spotifyId: String): Track = Track(spotifyId).let {
-        fillObject(it)
-        v
+    fun getTrack(spotifyId: String): Track = Track(spotifyId).also {
+        val errors = fillObject(
+            it,
+            listOf(
+                TrackFetcher(spotifyId),
+            ),
+            emptyList(),
+        )
     }
 
     /**
@@ -30,10 +36,15 @@ class DataFactory {
     ): DoubleErrorLists = DoubleErrorLists(
         important = importantDataFillers
             .mapNotNull { it.fetchInto(musicalObject) }
-            .logErrors("important error fetching data:")
-            .fil
+            .also {
+                if (!logErrors) return@also
+                it.logErrors("important error fetching data:")
+            },
         unimportant = unimportantDataFillers
             .mapNotNull { it.fetchInto(musicalObject) }
-            .logErrors("unimportant error fetching data:")
+            .also {
+                if (!logErrors) return@also
+                it.logErrors("unimportant error fetching data:")
+            },
     )
 }

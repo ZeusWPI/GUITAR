@@ -22,8 +22,8 @@ class TrackController(val dataProvider: DataProvider) {
 @RequestMapping("/album/{id}")
 class AlbumController(val dataProvider: DataProvider) {
 
-    @GetMapping("/details")
-    fun getTrackById(@PathVariable id: String): Album? = dataProvider.getAlbum(id)
+//    @GetMapping("/details")
+//    fun getTrackById(@PathVariable id: String): Album? = dataProvider.getAlbum(id)
 }
 
 
@@ -31,6 +31,6 @@ class AlbumController(val dataProvider: DataProvider) {
 @RequestMapping("/artist/{id}")
 class ArtistController(val dataProvider: DataProvider) {
 
-    @GetMapping("/details")
-    fun getTrackById(@PathVariable id: String): Artist? = dataProvider.getArtist(id)
+//    @GetMapping("/details")
+//    fun getTrackById(@PathVariable id: String): Artist? = dataProvider.getArtist(id)
 }
