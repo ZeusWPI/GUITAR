@@ -6,9 +6,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class DataProvider {
-    val dataFactory = DataFactory()
-
     // TODO: don't implement this as spring component
+    val dataFactory = DataFactory()
     val trackStore: TrackStore = InMemoryTrackStore()
 
     fun getTrack(id: String): Track =
