@@ -31,5 +31,5 @@ data class Album(
     var name: String? = null,
     var tracks: List<Track>? = null,
     var artists: List<Artist>? = null,
-    var spotifyUrl: String?
+    var spotifyUrl: String? = null,
 ) : MusicalObject

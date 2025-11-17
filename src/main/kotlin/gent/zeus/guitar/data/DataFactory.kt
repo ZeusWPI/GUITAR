@@ -1,9 +1,9 @@
 package gent.zeus.guitar.data
 
-import gent.zeus.guitar.DataFetchError
 import gent.zeus.guitar.DoubleErrorLists
-import gent.zeus.guitar.Logging
 import gent.zeus.guitar.logErrors
+import gent.zeus.guitar.spotify.AlbumFetcher
+import gent.zeus.guitar.spotify.ArtistFetcher
 import gent.zeus.guitar.spotify.SpotifyFetcher
 import gent.zeus.guitar.spotify.TrackFetcher
 
@@ -13,6 +13,26 @@ class DataFactory {
             it,
             listOf(
                 TrackFetcher(spotifyId),
+            ),
+            emptyList(),
+        )
+    }
+
+    fun getArtist(spotifyId: String): Artist = Artist(spotifyId).also {
+        val errors = fillObject(
+            it,
+            listOf(
+                ArtistFetcher(spotifyId),
+            ),
+            emptyList(),
+        )
+    }
+
+    fun getAlbum(spotifyId: String): Album = Album(spotifyId).also {
+        val errors = fillObject(
+            it,
+            listOf(
+                AlbumFetcher(spotifyId),
             ),
             emptyList(),
         )

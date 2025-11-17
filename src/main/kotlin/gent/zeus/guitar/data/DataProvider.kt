@@ -2,9 +2,6 @@ package gent.zeus.guitar.data
 
 import gent.zeus.guitar.storage.InMemoryTrackStore
 import gent.zeus.guitar.storage.TrackStore
-import gent.zeus.guitar.spotify.AlbumFetcher
-import gent.zeus.guitar.spotify.ArtistFetcher
-import gent.zeus.guitar.spotify.TrackFetcher
 import org.springframework.stereotype.Component
 
 @Component
@@ -22,7 +19,7 @@ class DataProvider {
         trackStore.delete(id)
     }
 
-//    fun getAlbum(id: String): Album? = AlbumFetcher(id).fetch()
+    fun getAlbum(id: String): Album = dataFactory.getAlbum(id)
 
-//    fun getArtist(id: String): Artist? = ArtistFetcher(id).fetch()
+    fun getArtist(id: String): Artist = dataFactory.getArtist(id)
 }

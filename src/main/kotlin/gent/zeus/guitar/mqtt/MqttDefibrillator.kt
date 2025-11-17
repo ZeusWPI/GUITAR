@@ -1,11 +1,6 @@
 package gent.zeus.guitar.mqtt
 
 import gent.zeus.guitar.Logging
-import org.apache.juli.logging.Log
-import org.springframework.boot.ApplicationArguments
-import org.springframework.boot.ApplicationRunner
-import org.springframework.scheduling.config.Task
-import java.net.ConnectException
 
 
 const val SLEEP_TIME: Long = 1000 * 30 * 1
