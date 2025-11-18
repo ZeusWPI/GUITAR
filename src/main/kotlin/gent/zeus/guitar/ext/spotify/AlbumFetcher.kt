@@ -7,15 +7,16 @@ import gent.zeus.guitar.data.Artist
 import gent.zeus.guitar.data.Track
 
 class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALBUM) {
-    override fun fetchInto(musicalObject: Album): DataFetchError? {
+    override fun fetchInto(musicalObject: Album): DataResult<Album> {
         val albumJson = when (val response = getSpotifyJson<SpotifyAlbumJson>()) {
-            is DataResult.DataError<*, *> -> return response.error
             is DataResult.DataSuccess<SpotifyAlbumJson> -> response.value
+            is DataResult.DataError<*, *> -> return DataResult.DataError(response.error)
         }
 
-        musicalObject.apply {
-            spotifyId = albumJson.id;
-            name = albumJson.name;
+        return DataResult.DataSuccess(
+            musicalObject.copy(
+                spotifyId = albumJson.id,
+            name = albumJson.name,
             tracks = albumJson.tracks?.items?.map { trackJson ->
                 Track(
                     spotifyId = trackJson.id,
@@ -35,7 +36,7 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                     votesFor = null,
                     votesAgainst = null,
                 )
-            } ?: emptyList();
+            } ?: emptyList(),
             artists = albumJson.artists?.map { artistJson ->
                 Artist(
                     spotifyId = artistJson.id,
@@ -43,9 +44,8 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
                     genres = null,
                     spotifyUrl = null,
                 )
-            } ?: emptyList();
-            spotifyUrl = albumJson.externalUrls?.spotify;
-        }
-        return null
+            } ?: emptyList(),
+            spotifyUrl = albumJson.externalUrls?.spotify,
+        ))
     }
 }
