@@ -1,10 +1,10 @@
 package gent.zeus.guitar.ext.spotify
 
 import gent.zeus.guitar.*
-import gent.zeus.guitar.data.MusicalObject
+import gent.zeus.guitar.data.MusicModel
 import gent.zeus.guitar.ext.DataFiller
 
-abstract class SpotifyFetcher<T : MusicalObject>(
+abstract class SpotifyFetcher<T : MusicModel>(
     protected val id: String,
     protected val spotifyObjectType: SpotifyObjectType
 ) : DataFiller<T> {

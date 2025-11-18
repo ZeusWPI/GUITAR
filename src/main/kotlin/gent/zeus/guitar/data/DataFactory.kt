@@ -48,7 +48,7 @@ class DataFactory {
      * @param logErrors log errors in console
      * @return a list of errors that were caused (will be empty if there were no errors)
      */
-    private fun <T : MusicalObject> fillObject(
+    private fun <T : MusicModel> fillObject(
         musicalObject: T,
         importantDataFillers: Collection<DataFiller<T>>,
         unimportantDataFillers: Collection<DataFiller<T>>,

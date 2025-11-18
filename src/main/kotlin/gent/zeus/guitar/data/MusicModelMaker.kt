@@ -4,7 +4,7 @@ import gent.zeus.guitar.DoubleErrorLists
 import gent.zeus.guitar.ext.DataFiller
 import gent.zeus.guitar.logErrors
 
-abstract class MusicalObjectMaker<T : MusicalObject> {
+abstract class MusicModelMaker<T : MusicModel> {
 
     /**
      * assembles a musical object with the given id
@@ -22,7 +22,7 @@ abstract class MusicalObjectMaker<T : MusicalObject> {
      * @param logErrors log errors in console
      * @return a list of errors that were caused (will be empty if there were no errors)
      */
-    protected fun <T : MusicalObject> fillObject(
+    protected fun <T : MusicModel> fillObject(
         musicalObject: T,
         importantDataFillers: Collection<DataFiller<T>>,
         unimportantDataFillers: Collection<DataFiller<T>>,

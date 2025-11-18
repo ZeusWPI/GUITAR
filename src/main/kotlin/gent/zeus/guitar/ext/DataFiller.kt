@@ -1,10 +1,9 @@
 package gent.zeus.guitar.ext
 
-import gent.zeus.guitar.DataFetchError
 import gent.zeus.guitar.DataResult
-import gent.zeus.guitar.data.MusicalObject
+import gent.zeus.guitar.data.MusicModel
 
-interface DataFiller<T : MusicalObject> {
+interface DataFiller<T : MusicModel> {
 
 
     /**

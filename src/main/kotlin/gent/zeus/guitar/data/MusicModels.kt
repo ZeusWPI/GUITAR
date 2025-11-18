@@ -2,7 +2,7 @@ package gent.zeus.guitar.data
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-sealed interface MusicalObject
+sealed interface MusicModel
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Track(
@@ -15,7 +15,7 @@ data class Track(
     val spotifyUrl: String? = null,
     val votesFor: Int? = null,
     val votesAgainst: Int? = null,
-) : MusicalObject
+) : MusicModel
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Artist(
@@ -23,7 +23,7 @@ data class Artist(
     val name: String? = null,
     val genres: List<String>? = null,
     val spotifyUrl: String? = null
-) : MusicalObject
+) : MusicModel
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Album(
@@ -32,4 +32,4 @@ data class Album(
     val tracks: List<Track>? = null,
     val artists: List<Artist>? = null,
     val spotifyUrl: String? = null,
-) : MusicalObject
+) : MusicModel
