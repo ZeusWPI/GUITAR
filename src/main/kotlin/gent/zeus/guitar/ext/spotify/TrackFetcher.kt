@@ -12,7 +12,6 @@ class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRA
             is DataResult.DataSuccess<SpotifyTrackJson> -> response.value
             is DataResult.DataError<*, *> -> return DataResult.DataError(response.error)
         }
-//        val voteCount = VoteFetcher().getVotes(trackJson.id)  // TODO: inject this somewhere else
 
         return DataResult.DataSuccess(
             musicalObject.copy(

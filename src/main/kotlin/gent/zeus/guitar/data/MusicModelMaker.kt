@@ -1,16 +1,18 @@
 package gent.zeus.guitar.data
 
+import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.DoubleErrorLists
 import gent.zeus.guitar.ext.DataFiller
 import gent.zeus.guitar.logErrors
 
-abstract class MusicModelMaker<T : MusicModel> {
+class MusicModelMaker<T : MusicModel>(
+) {
 
     /**
      * assembles a musical object with the given id
      * @param id the spotify id of the object
      */
-    abstract fun assemble(id: String): T
+    fun getModel(id: String): DataResult<T>
 
     /**
      * fills the given musical object with data using the given data fillers. will modify the object.
@@ -30,4 +32,9 @@ abstract class MusicModelMaker<T : MusicModel> {
         important = importantDataFillers.mapNotNull { it.fetchInto(musicalObject) },
         unimportant = unimportantDataFillers.mapNotNull { it.fetchInto(musicalObject) },
     )
+
+    protected fun <T : MusicModel> assemble(
+        importantDataFillers: Iterable<DataFiller<T>>,
+        unimportantDataFillers: Iterable<DataFiller<T>>,
+    ):
 }

@@ -15,7 +15,7 @@ class AlbumFetcher(id: String) : SpotifyFetcher<Album>(id, SpotifyObjectType.ALB
 
         return DataResult.DataSuccess(
             musicalObject.copy(
-                spotifyId = albumJson.id,
+            spotifyId = albumJson.id,
             name = albumJson.name,
             tracks = albumJson.tracks?.items?.map { trackJson ->
                 Track(

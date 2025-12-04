@@ -5,7 +5,6 @@ import gent.zeus.guitar.data.MusicModel
 
 interface DataFiller<T : MusicModel> {
 
-
     /**
      * fetch data and put it in the given MusicalObject
      */

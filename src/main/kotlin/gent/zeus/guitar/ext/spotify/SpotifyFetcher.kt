@@ -11,7 +11,6 @@ abstract class SpotifyFetcher<T : MusicModel>(
     /**
      * fetch data and put it in the given MusicalObject
      */
-    // TODO handle http error 4xx
     protected inline fun <reified J : SpotifyJson> getSpotifyJson(): DataResult<J> =
         with(
             makeAuthorizedRequest<J>(
