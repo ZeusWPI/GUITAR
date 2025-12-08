@@ -12,9 +12,9 @@ class CombinedDataFiller<T : MusicModel>(
     val mainFiller: DataFiller<T>,
     val fallbackFiller: DataFiller<T>
 ) : DataFiller<T> {
-    override fun fetchInto(musicalObject: T): DataResult<T> =
-        when (val it = mainFiller.fetchInto(musicalObject)) {
-            is DataResult.DataSuccess<*> -> it
-            is DataResult.DataError<*, *> -> fallbackFiller.fetchInto(musicalObject)
+    override fun fetchInto(musicModel: T): DataResult<T> =
+        when (val it = mainFiller.fetchInto(musicModel)) {
+            is DataResult.Ok -> it
+            is DataResult.Error<*, *> -> fallbackFiller.fetchInto(musicModel)
         }
 }

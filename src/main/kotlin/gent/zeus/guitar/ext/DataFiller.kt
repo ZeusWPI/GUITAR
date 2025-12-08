@@ -8,5 +8,5 @@ interface DataFiller<T : MusicModel> {
     /**
      * fetch data and put it in the given MusicalObject
      */
-    fun fetchInto(musicalObject: T): DataResult<T>
+    fun fetchInto(musicModel: T): DataResult<T>
 }

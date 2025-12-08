@@ -1,20 +1,19 @@
 package gent.zeus.guitar.ext.spotify
 
-import gent.zeus.guitar.DataFetchError
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.data.Album
 import gent.zeus.guitar.data.Artist
 import gent.zeus.guitar.data.Track
 
 class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRACK) {
-    override fun fetchInto(musicalObject: Track): DataResult<Track> {
+    override fun fetchInto(musicModel: Track): DataResult<Track> {
         val trackJson = when (val response = getSpotifyJson<SpotifyTrackJson>()) {
-            is DataResult.DataSuccess<SpotifyTrackJson> -> response.value
-            is DataResult.DataError<*, *> -> return DataResult.DataError(response.error)
+            is DataResult.Ok -> response.value
+            is DataResult.Error<*, *> -> return DataResult.Error(response.error)
         }
 
-        return DataResult.DataSuccess(
-            musicalObject.copy(
+        return DataResult.Ok(
+            musicModel.copy(
                 spotifyId = trackJson.id,
                 name = trackJson.name,
                 album = trackJson.album?.let { albumJson ->

@@ -13,16 +13,32 @@ abstract class DataFetchError(val message: String, val httpStatusCode: Int) {
 /**
  * error caused by user wrongdoing
  */
-open class UserError(message: String, httpStatusCode: Int = 500) : DataFetchError(message, httpStatusCode)
+open class UserError(message: String, httpStatusCode: Int = 400) : DataFetchError(message, httpStatusCode)
 
 /**
  * error caused by server mishaps
  */
-open class ServerError(message: String, httpStatusCode: Int = 400) : DataFetchError(message, httpStatusCode)
+open class ServerError(message: String, httpStatusCode: Int = 500) : DataFetchError(message, httpStatusCode)
 
+class MultiError(errors: List<DataFetchError>) : DataFetchError(
+    message = errors.joinToString(
+        ", ",
+        "multiple errors were encountered: "
+    ) { "${it.message} (${it.httpStatusCode})" },
+
+    httpStatusCode = when {
+        errors.any { it is UserError && it.httpStatusCode == 404 } -> 404
+        errors.any { it is UserError } -> 400
+        else -> 500
+    }
+)
+
+/**
+ * success or error when handling musical data
+ */
 sealed class DataResult<T> {
-    data class DataSuccess<T>(val value: T) : DataResult<T>()
-    data class DataError<E : DataFetchError, T>(val error: E) : DataResult<T>()
+    data class Ok<T>(val value: T) : DataResult<T>()
+    data class Error<E : DataFetchError, T>(val error: E) : DataResult<T>()
 }
 
 data class DoubleErrorLists(
@@ -34,7 +50,6 @@ data class DoubleErrorLists(
  * log all the errors in the list
  * @param pre: bit to put before the error message
  */
-fun <E : DataFetchError> Iterable<E>.logErrors(pre: String) = map {
+fun <E : DataFetchError> Iterable<E>.logErrors(pre: String) = onEach {
     logger.error("$pre ${it.message} (${it.httpStatusCode})")
-    it
 }

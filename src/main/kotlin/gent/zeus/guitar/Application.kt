@@ -1,7 +1,7 @@
 package gent.zeus.guitar
 
-import gent.zeus.guitar.mqtt.MqttEnv
 import gent.zeus.guitar.ext.spotify.SpotifyToken
+import gent.zeus.guitar.mqtt.MqttEnv
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -19,26 +19,13 @@ abstract class SpotifyFetcher<T : MusicModel>(
             )
         ) {
             return when (statusCode.value()) {
-                200 if body != null -> DataResult.DataSuccess(body!!)
-                404 -> DataResult.DataError(TrackNotFoundError())
-                else -> DataResult.DataError<_, J>(SpotifyError()).also {
+                200 if body != null -> DataResult.Ok(body!!)
+                404 -> DataResult.Error(TrackNotFoundError())
+                else -> DataResult.Error<_, J>(SpotifyError()).also {
                     logger.debug("error fetching {} with id {}: {}", spotifyObjectType.typeString, id, it)
                 }
             }
         }
-    /*
-    REST_CLIENT.get()
-        .uri("${SPOTIFY_API_URL}/${spotifyObjectType.apiUrlPrefix}/${id}")
-        .header(HttpHeaders.AUTHORIZATION, "Bearer ${SpotifyToken.get()}")
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .body<J>()
-        ?: run {
-            logger.error("error fetching ${spotifyObjectType.typeString} with id ${id}: response body was null")
-            null
-        }
-
-     */
 }
 
 enum class SpotifyObjectType(val apiUrlPrefix: String, val typeString: String) {
