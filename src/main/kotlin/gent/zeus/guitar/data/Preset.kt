@@ -1,9 +1,21 @@
 package gent.zeus.guitar.data
 
+import gent.zeus.guitar.data.Preset.Album
+import gent.zeus.guitar.data.Preset.Artist
+import gent.zeus.guitar.ext.spotify.AlbumFetcher
+import gent.zeus.guitar.ext.spotify.ArtistFetcher
 import gent.zeus.guitar.ext.spotify.TrackFetcher
 
 object Preset {
     object Track {
-        val details get() = MusicModelMaker({ id -> Track(id) }, TrackFetcher())
+        val details get() = MusicModelMaker(::Track, TrackFetcher())
+    }
+
+    object Album {
+        val details get() = MusicModelMaker(::Album, AlbumFetcher())
+    }
+
+    object Artist {
+        val details get() = MusicModelMaker(::Artist, ArtistFetcher())
     }
 }

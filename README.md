@@ -13,3 +13,7 @@ websockets
 - [ ] current status
 - [ ] broadcast details on mqtt
 - [ ] playlist generation based on stats ("kelder toppers" etc)
+
+## do next
+
+- fix http error handling in `Http.kt`

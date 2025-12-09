@@ -30,7 +30,7 @@ class TrackController() {
 class AlbumController() {
 
     @GetMapping("/details")
-    fun getTrackById(@PathVariable id: String): Album = Album(id)
+    private fun albumDetails(@PathVariable id: String) = getApiResponse(Preset.Album.details, id)
 }
 
 
@@ -39,5 +39,5 @@ class AlbumController() {
 class ArtistController() {
 
     @GetMapping("/details")
-    fun getTrackById(@PathVariable id: String): Artist = Artist(id)
+    private fun artistDetails(@PathVariable id: String) = getApiResponse(Preset.Artist.details, id)
 }

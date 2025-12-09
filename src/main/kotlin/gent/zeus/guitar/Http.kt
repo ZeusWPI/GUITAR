@@ -14,4 +14,5 @@ inline fun <reified T : Any> makeAuthorizedRequest(uri: String, bearerToken: Str
         .header(HttpHeaders.AUTHORIZATION, "Bearer $bearerToken")
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .toEntity<T>()
+        .toEntity<T>()  // this crashes if the remote server returns 4xx or 5xx
+// TODO: fix http error handling
