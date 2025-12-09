@@ -1,8 +1,9 @@
 package gent.zeus.guitar.data
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import gent.zeus.guitar.api.ApiResponseObj
 
-sealed interface MusicModel
+sealed interface MusicModel : ApiResponseObj
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Track(

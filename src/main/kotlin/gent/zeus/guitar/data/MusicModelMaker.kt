@@ -22,7 +22,7 @@ abstract class MusicModelMaker<T : MusicModel>(emptyModel: T, vararg val fillers
             }
         }
 
-        if (ignoreErrors) return DataResult.Ok(model)
+        if (ignoreErrors || errors.isEmpty()) return DataResult.Ok(model)
         return DataResult.Error(MultiError(errors))
     }
 }

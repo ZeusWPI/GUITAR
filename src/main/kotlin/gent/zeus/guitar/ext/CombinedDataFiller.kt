@@ -18,3 +18,7 @@ class CombinedDataFiller<T : MusicModel>(
             is DataResult.Error<*, *> -> fallbackFiller.fetchInto(musicModel)
         }
 }
+
+infix fun <T : MusicModel> DataFiller<T>.or(other: DataFiller<T>) =
+    CombinedDataFiller(this, other)
+
