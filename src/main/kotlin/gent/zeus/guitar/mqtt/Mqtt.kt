@@ -32,7 +32,7 @@ internal object MqttEnv : StartupCheck {
 }
 
 
-@Component
+//@Component
 class Mqtt : ApplicationRunner {
 
     private val client = MqttCallbackClient()

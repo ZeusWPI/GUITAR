@@ -2,6 +2,7 @@ package gent.zeus.guitar.api
 
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.data.MusicModel
+import gent.zeus.guitar.data.MusicModelMaker
 import org.springframework.http.ResponseEntity
 
 interface ApiResponseObj
@@ -11,18 +12,16 @@ private data class ApiError(
     val status: Int,
 ) : ApiResponseObj
 
-abstract class ApiResponse<T : MusicModel> {
-    var ignoreErrors = false
-
-    protected abstract fun collect(id: String): DataResult<T>
-
-    fun get(id: String): ResponseEntity<ApiResponseObj> = when (val it = collect(id)) {
-        is DataResult.Ok -> ResponseEntity.status(200).body(it.value)
-        is DataResult.Error<*, *> -> ResponseEntity.status(it.error.httpStatusCode).body(
-            ApiError(
-                message = it.error.message,
-                status = it.error.httpStatusCode,
-            )
+fun <T : MusicModel> getApiResponse(
+    modelMaker: MusicModelMaker<T>,
+    id: String,
+    ignoreErrors: Boolean = false
+): ResponseEntity<ApiResponseObj> = when (val it = modelMaker.getModel(id, ignoreErrors)) {
+    is DataResult.Ok -> ResponseEntity.status(200).body(it.value)
+    is DataResult.Error<*, *> -> ResponseEntity.status(it.error.httpStatusCode).body(
+        ApiError(
+            message = it.error.message,
+            status = it.error.httpStatusCode,
         )
-    }
+    )
 }

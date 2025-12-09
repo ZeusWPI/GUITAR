@@ -3,6 +3,7 @@ package gent.zeus.guitar.api
 import gent.zeus.guitar.data.Album
 import gent.zeus.guitar.data.Artist
 import gent.zeus.guitar.data.DataProvider
+import gent.zeus.guitar.data.Preset
 import gent.zeus.guitar.data.Track
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class TrackController() {
 
     @GetMapping("/details")
-    fun getTrackById(@PathVariable id: String): Track = Track(id)
+    private fun trackDetails(@PathVariable id: String) = getApiResponse(Preset.Track.details, id)
 
     @GetMapping("/test")
     fun test(@PathVariable id: String): ResponseEntity<String> =
