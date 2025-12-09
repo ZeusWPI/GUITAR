@@ -22,6 +22,7 @@ fun main(args: Array<String>) {
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class DoStartupChecks : CommandLineRunner {
     //TODO despringify
+    // TODO eliminate startup checks (use global Environment object/class)
     private val checklist: List<StartupCheck> = listOf(
         SpotifyToken,
         MqttEnv,
