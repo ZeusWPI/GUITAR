@@ -3,9 +3,9 @@ package gent.zeus.guitar.data
 import gent.zeus.guitar.DataFetchError
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.MultiError
-import gent.zeus.guitar.ext.DataFiller
+import gent.zeus.guitar.ext.ModelFiller
 
-abstract class MusicModelMaker<T : MusicModel>(var baseModel: T, vararg val fillers: DataFiller<T>) {
+abstract class MusicModelMaker<T : MusicModel>(var baseModel: T, vararg val fillers: ModelFiller<T>) {
 
     /**
      * assembles a musical object with the given id
