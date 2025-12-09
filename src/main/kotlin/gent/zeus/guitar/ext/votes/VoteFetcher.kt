@@ -20,7 +20,7 @@ internal object VotesEnv : StartupCheck {
 }
 
 
-class VoteFetcher {
+class VoteFetcher {  // TODO extend model filler interface
     data class VoteCount(val songId: String, val votesFor: Int, val votesAgainst: Int)
 
     fun getVotes(spotifyId: String): VoteCount {

@@ -5,8 +5,7 @@ import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.MultiError
 import gent.zeus.guitar.ext.DataFiller
 
-abstract class MusicModelMaker<T : MusicModel>(emptyModel: T, vararg val fillers: DataFiller<T>) {
-    var model = emptyModel
+abstract class MusicModelMaker<T : MusicModel>(var baseModel: T, vararg val fillers: DataFiller<T>) {
 
     /**
      * assembles a musical object with the given id
@@ -16,13 +15,13 @@ abstract class MusicModelMaker<T : MusicModel>(emptyModel: T, vararg val fillers
     fun getModel(id: String, ignoreErrors: Boolean = false): DataResult<T> {
         val errors = mutableListOf<DataFetchError>()
         fillers.forEach { filler ->
-            when (val result = filler.fetchInto(model)) {
-                is DataResult.Ok -> model = result.value
+            when (val result = filler.fetchInto(baseModel)) {
+                is DataResult.Ok -> baseModel = result.value
                 is DataResult.Error<*, *> -> errors.add(result.error)
             }
         }
 
-        if (ignoreErrors || errors.isEmpty()) return DataResult.Ok(model)
+        if (ignoreErrors || errors.isEmpty()) return DataResult.Ok(baseModel)
         return DataResult.Error(MultiError(errors))
     }
 }

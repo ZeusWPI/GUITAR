@@ -5,13 +5,12 @@ import gent.zeus.guitar.data.MusicModel
 import gent.zeus.guitar.ext.DataFiller
 
 abstract class SpotifyFetcher<T : MusicModel>(
-    protected val id: String,
     protected val spotifyObjectType: SpotifyObjectType
 ) : DataFiller<T> {
     /**
      * fetch data and put it in the given MusicalObject
      */
-    protected inline fun <reified J : SpotifyJson> getSpotifyJson(): DataResult<J> =
+    protected inline fun <reified J : SpotifyJson> getSpotifyJson(id: String): DataResult<J> =
         with(
             makeAuthorizedRequest<J>(
                 "${SPOTIFY_API_URL}/${spotifyObjectType.apiUrlPrefix}/${id}",

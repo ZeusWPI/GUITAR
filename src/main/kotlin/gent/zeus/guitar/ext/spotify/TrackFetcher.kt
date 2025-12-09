@@ -5,9 +5,9 @@ import gent.zeus.guitar.data.Album
 import gent.zeus.guitar.data.Artist
 import gent.zeus.guitar.data.Track
 
-class TrackFetcher(id: String) : SpotifyFetcher<Track>(id, SpotifyObjectType.TRACK) {
+class TrackFetcher() : SpotifyFetcher<Track>(SpotifyObjectType.TRACK) {
     override fun fetchInto(musicModel: Track): DataResult<Track> {
-        val trackJson = when (val response = getSpotifyJson<SpotifyTrackJson>()) {
+        val trackJson = when (val response = getSpotifyJson<SpotifyTrackJson>(musicModel.spotifyId)) {
             is DataResult.Ok -> response.value
             is DataResult.Error<*, *> -> return DataResult.Error(response.error)
         }
