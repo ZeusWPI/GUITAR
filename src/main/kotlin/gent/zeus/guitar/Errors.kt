@@ -36,15 +36,10 @@ class MultiError(errors: List<DataFetchError>) : DataFetchError(
 /**
  * success or error when handling musical data
  */
-sealed class DataResult<T> {
+sealed class DataResult<out T> {
     data class Ok<T>(val value: T) : DataResult<T>()
-    data class Error<E : DataFetchError, T>(val error: E) : DataResult<T>()
+    data class Error<E : DataFetchError>(val error: E) : DataResult<Nothing>()
 }
-
-data class DoubleErrorLists(
-    val important: List<DataFetchError>,
-    val unimportant: List<DataFetchError>,
-)
 
 /**
  * log all the errors in the list

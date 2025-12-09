@@ -20,7 +20,7 @@ abstract class SpotifyFetcher<T : MusicModel>(
             return when (statusCode.value()) {
                 200 if body != null -> DataResult.Ok(body!!)
                 404 -> DataResult.Error(TrackNotFoundError())
-                else -> DataResult.Error<_, J>(SpotifyError()).also {
+                else -> DataResult.Error(SpotifyError()).also {
                     logger.debug("error fetching {} with id {}: {}", spotifyObjectType.typeString, id, it)
                 }
             }

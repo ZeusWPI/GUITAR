@@ -18,7 +18,7 @@ fun <T : MusicModel> getApiResponse(
     ignoreErrors: Boolean = false
 ): ResponseEntity<ApiResponseObj> = when (val it = modelMaker.getModel(id, ignoreErrors)) {
     is DataResult.Ok -> ResponseEntity.status(200).body(it.value)
-    is DataResult.Error<*, *> -> ResponseEntity.status(it.error.httpStatusCode).body(
+    is DataResult.Error<*> -> ResponseEntity.status(it.error.httpStatusCode).body(
         ApiError(
             message = it.error.message,
             status = it.error.httpStatusCode,

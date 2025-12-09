@@ -15,7 +15,7 @@ class CombinedModelFiller<T : MusicModel>(
     override fun fetchInto(musicModel: T): DataResult<T> =
         when (val it = mainFiller.fetchInto(musicModel)) {
             is DataResult.Ok -> it
-            is DataResult.Error<*, *> -> fallbackFiller.fetchInto(musicModel)
+            is DataResult.Error<*> -> fallbackFiller.fetchInto(musicModel)
         }
 }
 

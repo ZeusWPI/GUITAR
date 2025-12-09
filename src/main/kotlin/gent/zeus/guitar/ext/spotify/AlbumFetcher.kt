@@ -9,7 +9,7 @@ class AlbumFetcher() : SpotifyFetcher<Album>(SpotifyObjectType.ALBUM) {
     override fun fetchInto(musicModel: Album): DataResult<Album> {
         val albumJson = when (val response = getSpotifyJson<SpotifyAlbumJson>(musicModel.spotifyId)) {
             is DataResult.Ok -> response.value
-            is DataResult.Error<*, *> -> return DataResult.Error(response.error)
+            is DataResult.Error<*> -> return DataResult.Error(response.error)
         }
 
         return DataResult.Ok(

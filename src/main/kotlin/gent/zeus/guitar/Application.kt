@@ -45,3 +45,12 @@ class DoStartupChecks : CommandLineRunner {
         logger.info("startup checks complete!")
     }
 }
+
+fun quicksort(list: MutableList<Int>): MutableList<Int> = when {
+    list.size <= 1 -> list
+    else -> list.removeAt(0).let { pivot ->
+        quicksort(list.filter { it < pivot }.toMutableList()) +
+                pivot +
+                quicksort(list.filter { it > pivot }.toMutableList())
+    }.toMutableList()
+}

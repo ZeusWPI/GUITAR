@@ -7,7 +7,7 @@ class ArtistFetcher() : SpotifyFetcher<Artist>(SpotifyObjectType.ARTIST) {
     override fun fetchInto(musicModel: Artist): DataResult<Artist> {
         val artistJson = when (val response = getSpotifyJson<SpotifyArtistJson>(musicModel.spotifyId)) {
             is DataResult.Ok -> response.value
-            is DataResult.Error<*, *> -> return DataResult.Error(response.error)
+            is DataResult.Error<*> -> return DataResult.Error(response.error)
         }
 
         return DataResult.Ok(

@@ -21,7 +21,7 @@ class MusicModelMaker<T : MusicModel>(
         fillers.forEach { filler ->
             when (val result = filler.fetchInto(baseModel)) {
                 is DataResult.Ok -> baseModel = result.value
-                is DataResult.Error<*, *> -> errors.add(result.error)
+                is DataResult.Error<*> -> errors.add(result.error)
             }
         }
 
