@@ -24,5 +24,4 @@ fun <T : MusicModel> getApiResponse(
             status = it.error.httpStatusCode,
         )
     )
-    // TODO: log actual error(s) from remote server(s)
 }

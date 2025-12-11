@@ -4,6 +4,7 @@ import gent.zeus.guitar.DataFetchError
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.MultiError
 import gent.zeus.guitar.ext.ModelFiller
+import gent.zeus.guitar.logger
 
 class MusicModelMaker<T : MusicModel>(
     private val baseModelFactory: (spotifyId: String) -> T,
@@ -26,6 +27,9 @@ class MusicModelMaker<T : MusicModel>(
         }
 
         if (ignoreErrors || errors.isEmpty()) return DataResult.Ok(baseModel)
-        return DataResult.Error(MultiError(errors))
+        DataResult.Error(MultiError(errors)).run {
+            if (error.httpStatusCode in 500..599) logger.error("errors encountered while building music model: " + error.remoteError)
+            return this
+        }
     }
 }

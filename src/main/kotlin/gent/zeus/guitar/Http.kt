@@ -22,6 +22,7 @@ inline fun <reified T : Any> httpRequestIntoObj(uri: String, bearerToken: String
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .body<T>().let {
+                it ?: return HttpResponse.Error(500, "response body was null")
                 return HttpResponse.Ok(200, it)
             }
     } catch (e: HttpClientErrorException) {
@@ -29,6 +30,6 @@ inline fun <reified T : Any> httpRequestIntoObj(uri: String, bearerToken: String
     }
 
 sealed class HttpResponse<out T> {
-    data class Ok<T>(val statusCode: Int, val body: T?) : HttpResponse<T>()
+    data class Ok<T>(val statusCode: Int, val body: T) : HttpResponse<T>()
     data class Error(val statusCode: Int, val body: String) : HttpResponse<Nothing>()
 }

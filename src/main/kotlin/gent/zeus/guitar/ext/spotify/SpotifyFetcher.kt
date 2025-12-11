@@ -3,7 +3,6 @@ package gent.zeus.guitar.ext.spotify
 import gent.zeus.guitar.*
 import gent.zeus.guitar.data.MusicModel
 import gent.zeus.guitar.ext.ModelFiller
-import org.slf4j.Logger
 
 abstract class SpotifyFetcher<T : MusicModel>(
     protected val spotifyObjectType: SpotifyObjectType
@@ -18,15 +17,12 @@ abstract class SpotifyFetcher<T : MusicModel>(
                 "${SpotifyToken.get()}"
             )
         ) {
-            logger.error(this.toString())
             return when (this) {
-                is HttpResponse.Ok if body != null -> DataResult.Ok(body)
+                is HttpResponse.Ok -> DataResult.Ok(body)
                 is HttpResponse.Error -> when (statusCode) {
-                    404 -> DataResult.Error(TrackNotFoundError())
-                    else -> DataResult.Error(SpotifyError())
+                    404 -> DataResult.Error(TrackNotFoundError(body))
+                    else -> DataResult.Error(SpotifyError(body))
                 }
-
-                else -> DataResult.Error(SpotifyError())  // success response but body was null
             }
         }
 }
