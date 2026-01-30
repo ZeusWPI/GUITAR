@@ -2,6 +2,9 @@ package gent.zeus.guitar
 
 import gent.zeus.guitar.ext.spotify.SpotifyToken
 import gent.zeus.guitar.mqtt.MqttEnv
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.Logger
+import org.apache.logging.log4j.core.config.Configurator
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

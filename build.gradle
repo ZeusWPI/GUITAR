@@ -26,8 +26,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'// management stuff
 //    runtimeOnly 'org.postgresql:postgresql'
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 
     // -- kotlin --
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -37,6 +40,12 @@ dependencies {
     // -- mqtt --
     implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 
+    // -- misc --
+    implementation 'com.github.f4b6a3:uuid-creator:6.1.0'
+}
+
+configurations {
+    all*.exclude module: 'spring-boot-starter-logging'
 }
 
 tasks.named('test') {
