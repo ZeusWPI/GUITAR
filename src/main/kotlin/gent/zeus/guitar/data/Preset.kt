@@ -5,10 +5,11 @@ import gent.zeus.guitar.data.Preset.Artist
 import gent.zeus.guitar.ext.spotify.AlbumFetcher
 import gent.zeus.guitar.ext.spotify.ArtistFetcher
 import gent.zeus.guitar.ext.spotify.TrackFetcher
+import gent.zeus.guitar.ext.votes.VoteFetcher
 
 object Preset {
     object Track {
-        val details get() = MusicModelMaker(::Track, TrackFetcher())
+        val details get() = MusicModelMaker(::Track, TrackFetcher(), VoteFetcher())
     }
 
     object Album {
