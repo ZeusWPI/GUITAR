@@ -31,7 +31,7 @@ object Environment {
      * @return the value of the variable
      */
     private fun loadRequired(key: String): String = System.getenv(key).takeUnless { it?.isEmpty() ?: true } ?: run {
-        logger.fatal("environment variable $key required but not set!")
+        logger.error("environment variable $key required but not set!")
         loadFailed = true
         return ""
     }
