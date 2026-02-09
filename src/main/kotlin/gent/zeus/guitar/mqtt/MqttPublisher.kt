@@ -1,6 +1,7 @@
 package gent.zeus.guitar.mqtt
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import gent.zeus.guitar.Environment
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -14,6 +15,6 @@ internal abstract class MqttPublisher(val mqttClient: MqttClient) {
             qos = 1
             isRetained = true
         }
-        mqttClient.publish(MqttEnv.PUBLISH_TOPIC, message)
+        mqttClient.publish(Environment.MQTT_PUBLISH_TOPIC, message)
     }
 }

@@ -1,23 +1,10 @@
 package gent.zeus.guitar.ext.votes
 
+import gent.zeus.guitar.Environment
 import gent.zeus.guitar.REST_CLIENT
-import gent.zeus.guitar.StartupCheck
-import gent.zeus.guitar.StartupCheckResult
 import gent.zeus.guitar.logger
 import org.springframework.http.MediaType
 import org.springframework.web.client.body
-
-
-internal object VotesEnv : StartupCheck {
-    val ZODOM_API_URL: String? = System.getenv("ZODOM_API_URL")
-
-    override fun checkOnStartup(): StartupCheckResult {
-        return StartupCheckResult(
-            ZODOM_API_URL != null,
-            "ZODOM_API_URL environment variable not set!"
-        )
-    }
-}
 
 
 class VoteFetcher {  // TODO extend model filler interface
@@ -25,7 +12,7 @@ class VoteFetcher {  // TODO extend model filler interface
 
     fun getVotes(spotifyId: String): VoteCount {
         return REST_CLIENT.get()
-            .uri("${VotesEnv.ZODOM_API_URL}/vote_count/$spotifyId")
+            .uri("${Environment.ZODOM_API_URL}/vote_count/$spotifyId")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .body<VoteCount>()

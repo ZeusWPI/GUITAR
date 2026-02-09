@@ -3,6 +3,7 @@ package gent.zeus.guitar.mqtt
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import gent.zeus.guitar.Environment
 import gent.zeus.guitar.data.DataProvider
 import gent.zeus.guitar.logger
 import org.eclipse.paho.client.mqttv3.*
@@ -13,7 +14,7 @@ class MqttCallbackClient : MqttCallback {
     private val dataProvider = DataProvider()
 
     private val mqttClient: MqttClient = MqttClient(
-        "tcp://${MqttEnv.URL}:${MqttEnv.PORT}",
+        MqttEnv.hostString,
         MqttEnv.clientId,
         MemoryPersistence(),
     ).apply {
@@ -53,8 +54,8 @@ class MqttCallbackClient : MqttCallback {
         logger.info("mqtt: received message on $topic")
         message ?: return
         when (topic) {
-            MqttEnv.LIBRESPOT_LISTEN_TOPIC -> handleLibrespotMessage(message)
-            MqttEnv.ZODOM_LISTEN_TOPIC -> handleZodomMessage(message)
+            Environment.MQTT_LIBRESPOT_LISTEN_TOPIC -> handleLibrespotMessage(message)
+            Environment.MQTT_ZODOM_LISTEN_TOPIC -> handleZodomMessage(message)
         }
     }
 
