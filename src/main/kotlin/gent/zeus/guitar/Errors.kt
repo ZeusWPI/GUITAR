@@ -55,3 +55,19 @@ sealed class DataResult<out T> {
 fun <E : DataFetchError> Iterable<E>.logErrors(pre: String) = onEach {
     logger.error("$pre ${it.message} (${it.httpStatusCode})")
 }
+
+/**
+ * tries to execute the code block. if the code throws an exception, it makes an error log statement
+ * and re-throws the exception
+ *
+ * @param messageOnFail message to put in log statement (will append ` (stacktrace below)`)
+ * @param block code block to try executing
+ */
+fun logException(messageOnFail: String, block: () -> Unit) {
+    try {
+        block()
+    } catch (e: Exception) {
+        logger.error("$messageOnFail (stacktrace below)")
+        throw e
+    }
+}

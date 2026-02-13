@@ -1,4 +1,4 @@
-package gent.zeus.guitar.mqtt
+package gent.zeus.guitar.mqttold
 
 
 internal data class MqttPlayingJson(

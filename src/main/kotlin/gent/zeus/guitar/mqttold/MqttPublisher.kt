@@ -1,4 +1,4 @@
-package gent.zeus.guitar.mqtt
+package gent.zeus.guitar.mqttold
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import gent.zeus.guitar.Environment
