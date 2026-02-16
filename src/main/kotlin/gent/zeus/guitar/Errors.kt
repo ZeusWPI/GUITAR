@@ -49,14 +49,6 @@ sealed class DataResult<out T> {
 }
 
 /**
- * log all the errors in the list
- * @param pre: bit to put before the error message
- */
-fun <E : DataFetchError> Iterable<E>.logErrors(pre: String) = onEach {
-    logger.error("$pre ${it.message} (${it.httpStatusCode})")
-}
-
-/**
  * tries to execute the code block. if the code throws an exception, it makes an error log statement
  * and re-throws the exception
  *

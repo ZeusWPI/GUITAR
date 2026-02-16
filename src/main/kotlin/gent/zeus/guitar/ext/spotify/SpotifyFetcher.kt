@@ -53,8 +53,8 @@ abstract class SpotifyFetcher<T : MusicModel>(
     }
 }
 
-enum class SpotifyObjectType(val apiUrlPrefix: String, val typeString: String) {
-    TRACK("tracks", "track"),
-    ALBUM("albums", "album"),
-    ARTIST("artists", "artist"),
+enum class SpotifyObjectType(val apiUrlPrefix: String) {
+    TRACK("tracks"),
+    ALBUM("albums"),
+    ARTIST("artists"),
 }
