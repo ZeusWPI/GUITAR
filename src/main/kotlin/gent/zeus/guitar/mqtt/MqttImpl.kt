@@ -21,13 +21,10 @@ suspend fun startMqtt() = coroutineScope {
         Environment.MQTT_PORT.toInt(),  // TODO: exception handling for port.toInt
     )
     val mqttPublisher = MqttPublisher(mqttClient, MqttQos.AT_MOST_ONCE, true)
-    MqttListener(
-        mqttClient,
-        Environment.MQTT_ZODOM_LISTEN_TOPIC,
-        Environment.MQTT_LIBRESPOT_LISTEN_TOPIC
-    ).startListening(this) { msg ->
-        val topic = msg.topic.toByteBuffer()
-        val message = msg.payloadAsBytes.decodeToString()
+    with(MqttListener(mqttClient)) {
+        addCallback("guitartest1") { logger.info("guitartest1!!!!") }
+        addCallback("guitartest2") { logger.info("guitartest2!!!!") }
+        startListening()
     }
 }
 

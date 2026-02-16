@@ -2,6 +2,7 @@ package gent.zeus.guitar.mqtt
 
 import com.hivemq.client.mqtt.MqttGlobalPublishFilter
 import com.hivemq.client.mqtt.datatypes.MqttQos
+import com.hivemq.client.mqtt.datatypes.MqttTopic
 import com.hivemq.client.mqtt.lifecycle.MqttClientConnectedContext
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
@@ -10,6 +11,7 @@ import gent.zeus.guitar.logExceptionFail
 import gent.zeus.guitar.logExceptionWarn
 import gent.zeus.guitar.logger
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -46,31 +48,53 @@ class MqttClient(val serverHost: String, val serverPort: Int) {
  * uses an [MqttClient] to listen for messages on specified topics
  *
  * @param client the [MqttClient] to use
- * @param topics topics to subscribe to
  */
-class MqttListener(client: MqttClient, vararg topics: String) {
+class MqttListener(private val client: MqttClient) {
     val publishes = client.client.publishes(MqttGlobalPublishFilter.ALL)
 
-    init {
-        topics.forEach { topic ->
-            logExceptionFail("failed to subscribe to topic $topic") {
-                client.client.subscribeWith().topicFilter(topic).send()
-            }
-            logger.info("subscribed to topic $topic")
+    /**
+     * you'd think that using a `MutableMap` would be the obvious choice here. but there's no way to get a string
+     * representation from an [MqttTopic][com.hivemq.client.mqtt.datatypes.MqttTopic] and it doesn't implement
+     * [Object.equals], only [java.lang.Comparable]. so the only way to find the correct entry would be to call
+     * `topic.compareTo(otherTopic)` on every item individually, so we might as well just use an array.
+     */
+    private val callbacks: MutableList<Pair<String, suspend (String) -> Unit>> = ArrayList()
+    private val callbackScope = CoroutineScope(Dispatchers.Default)
+
+    /**
+     * add a callback for messages with the specified topic. this function will be executed (concurrently)
+     * when a message is received with that topic.
+     *
+     * @param topic the topic to listen for
+     * @param callback the callback function: takes the message content as argument
+     */
+    fun addCallback(topic: String, callback: suspend (String) -> Unit) {
+        callbacks.add(topic to callback)
+        logExceptionFail("failed to subscribe to topic $topic") {
+            client.client.subscribeWith().topicFilter(topic).send()
         }
+        logger.info("subscribed to topic $topic")
     }
 
     /**
-     * start listening for messages and launch the callback in a new coroutine when a message is received
-     *
-     * @param coroutineScope coroutine scope to launch the callback in
-     * @param callback function to launch
+     * start listening for messages and launch the associated callback in a new coroutine when a message is received.
+     * this is a blocking method (runs forever).
      */
-    fun startListening(coroutineScope: CoroutineScope, callback: suspend (Mqtt5Publish) -> Unit) {
+    fun startListening() {
         while (true) {
-            val publish = publishes.receive()
-            coroutineScope.launch { callback(publish) }
+            val (receivedTopic, content) = with(publishes.receive()) {
+                this.topic to this.payloadAsBytes.decodeToString()
+            }
+
+            callbacks.forEach { (topic, callback) ->
+                if (topic.isTopic(receivedTopic)) callbackScope.launch { callback(content) }
+            }
         }
+    }
+
+    private fun String.isTopic(topic: MqttTopic): Boolean {
+        val thisTopic = MqttTopic.of(this)
+        return thisTopic.compareTo(topic) == 0
     }
 }
 
