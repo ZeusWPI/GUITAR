@@ -12,6 +12,8 @@ data class Track(
     val album: Album? = null,
     val artists: List<Artist>? = null,
     val durationInMs: Int? = null,
+    val startedAtMs: Long? = null,
+    val endsAtMs: Long? = null,
     val imageUrl: String? = null,
     val spotifyUrl: String? = null,
     val votesFor: Int? = null,

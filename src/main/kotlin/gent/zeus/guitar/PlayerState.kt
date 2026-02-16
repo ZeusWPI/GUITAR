@@ -21,3 +21,5 @@ object PlayerState {
 
     val mutex = Mutex()
 }
+
+class EmptyPlayerStateError : ServerError("no tracks have played yet since last restart", null)

@@ -37,24 +37,18 @@ class ArtistController {
     private fun artistDetails(@PathVariable id: String) = getApiResponse(Preset.Artist.details, id)
 }
 
-/*
-
-// coroutines make spring boot crash
 
 @RestController
 @RequestMapping("/current")
 class CurrentController {
 
-    @GetMapping("/")
-    private suspend fun currentTrack() = coroutineScope {
-        runBlocking {
-            val id = PlayerState.mutex.withLock { PlayerState.currentTrackId }
+    @GetMapping("")
+    private fun currentTrack() = runBlocking {
+        val id = PlayerState.mutex.withLock { PlayerState.currentTrackId }
 
-            if (id != null)
-                getApiResponse(Preset.Track.details, id)
-            else
-                ResponseEntity.status(200).body(null)
-        }
+        if (id != null)
+            getApiResponse(Preset.Track.detailsWithState, id)
+        else
+            ResponseEntity.status(200).body(null)
     }
 }
-*/
