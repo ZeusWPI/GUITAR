@@ -23,6 +23,9 @@ in the kelder, the host is `http://guitar.kelder.local` (or just `http://guitar`
 - `/artist/{spotify id}/details`: get details about artist
 - `/current`: get details about the currently playing track
 
+> to get the spotify id of a track/album/artist, copy the url, and the id will be here:
+> `https://open.spotify.com/track/{ID HERE}?si=...`
+
 ### mqtt
 
 details about the currently playing track are broadcasted on the mqtt broker (`mqtt://koin:1883`) under the topic
