@@ -1,6 +1,11 @@
 package gent.zeus.guitar.api
 
+import gent.zeus.guitar.PlayerState
 import gent.zeus.guitar.data.Preset
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.withLock
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -31,3 +36,25 @@ class ArtistController {
     @GetMapping("/details")
     private fun artistDetails(@PathVariable id: String) = getApiResponse(Preset.Artist.details, id)
 }
+
+/*
+
+// coroutines make spring boot crash
+
+@RestController
+@RequestMapping("/current")
+class CurrentController {
+
+    @GetMapping("/")
+    private suspend fun currentTrack() = coroutineScope {
+        runBlocking {
+            val id = PlayerState.mutex.withLock { PlayerState.currentTrackId }
+
+            if (id != null)
+                getApiResponse(Preset.Track.details, id)
+            else
+                ResponseEntity.status(200).body(null)
+        }
+    }
+}
+*/

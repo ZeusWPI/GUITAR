@@ -3,7 +3,7 @@ package gent.zeus.guitar
 import kotlinx.coroutines.sync.Mutex
 
 /**
- * current state of the kelder music. must be accessed using a mutex because it can get accessed concurrently.
+ * current state of the kelder music. must be accessed using the mutex because it can get accessed concurrently.
  */
 object PlayerState {
     /**
