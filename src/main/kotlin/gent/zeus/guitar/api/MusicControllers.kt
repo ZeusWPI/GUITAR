@@ -1,10 +1,6 @@
 package gent.zeus.guitar.api
 
-import gent.zeus.guitar.data.Album
-import gent.zeus.guitar.data.Artist
-import gent.zeus.guitar.data.DataProvider
 import gent.zeus.guitar.data.Preset
-import gent.zeus.guitar.data.Track
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

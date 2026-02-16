@@ -10,11 +10,9 @@ import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
 import gent.zeus.guitar.logExceptionFail
 import gent.zeus.guitar.logExceptionWarn
 import gent.zeus.guitar.logger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import java.util.UUID
+import java.util.*
 
 /**
  * represents a connection to an mqtt broker

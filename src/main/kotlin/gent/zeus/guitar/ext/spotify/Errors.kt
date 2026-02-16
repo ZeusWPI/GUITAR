@@ -2,7 +2,6 @@ package gent.zeus.guitar.ext.spotify
 
 import gent.zeus.guitar.ServerError
 import gent.zeus.guitar.UserError
-import org.apache.catalina.User
 
 class TrackNotFoundError(remoteError: String) : UserError("track not found", remoteError, 404)
 

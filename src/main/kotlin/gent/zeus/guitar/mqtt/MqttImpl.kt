@@ -1,22 +1,15 @@
 package gent.zeus.guitar.mqtt
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.Environment
 import gent.zeus.guitar.data.Preset
 import gent.zeus.guitar.logExceptionWarn
-import gent.zeus.guitar.logger
 import gent.zeus.guitar.mqttold.MqttVoteJson
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties
-import kotlin.time.Clock
-import kotlin.time.Duration.Companion.seconds
 
 class MqttContext {
     val mqttClient = MqttClient(

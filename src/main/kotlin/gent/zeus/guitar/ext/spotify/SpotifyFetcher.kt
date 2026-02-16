@@ -3,7 +3,7 @@ package gent.zeus.guitar.ext.spotify
 import gent.zeus.guitar.*
 import gent.zeus.guitar.data.MusicModel
 import gent.zeus.guitar.ext.ModelFiller
-import java.util.TreeMap
+import java.util.*
 
 abstract class SpotifyFetcher<T : MusicModel>(
     protected val spotifyObjectType: SpotifyObjectType

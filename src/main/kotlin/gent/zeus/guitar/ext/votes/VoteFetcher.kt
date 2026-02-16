@@ -1,13 +1,8 @@
 package gent.zeus.guitar.ext.votes
 
-import gent.zeus.guitar.DataResult
-import gent.zeus.guitar.Environment
-import gent.zeus.guitar.HttpResponse
-import gent.zeus.guitar.ServerError
+import gent.zeus.guitar.*
 import gent.zeus.guitar.data.Track
 import gent.zeus.guitar.ext.ModelFiller
-import gent.zeus.guitar.httpRequestIntoObj
-import org.springframework.web.client.body
 
 
 class VoteFetcher : ModelFiller<Track> {

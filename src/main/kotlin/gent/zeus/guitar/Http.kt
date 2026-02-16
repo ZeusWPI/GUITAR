@@ -1,13 +1,10 @@
 package gent.zeus.guitar
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
-import org.springframework.web.client.toEntity
 
 val REST_CLIENT: RestClient = RestClient.create()
 
