@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.Environment
+import gent.zeus.guitar.PlayerState
 import gent.zeus.guitar.data.Preset
 import gent.zeus.guitar.logExceptionWarn
 import kotlinx.coroutines.sync.Mutex
@@ -18,8 +19,6 @@ class MqttContext {
     val mqttPublisher = MqttPublisher(mqttClient, MqttQos.AT_MOST_ONCE, true)
 
     val mutex = Mutex()
-    var currentTrackId: String? = null
-    var currentStartTime: Long? = null
 
     suspend fun startMqtt() {
         if (Environment.MQTT_HOST.isEmpty()) return
@@ -32,8 +31,8 @@ class MqttContext {
     }
 
     private suspend fun handleVotes(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
-        val id = mutex.withLock { currentTrackId } ?: return@logExceptionWarn
-        val startTime = mutex.withLock { currentStartTime } ?: return@logExceptionWarn
+        val id = mutex.withLock { PlayerState.currentTrackId } ?: return@logExceptionWarn
+        val startTime = mutex.withLock { PlayerState.currentStartTime } ?: return@logExceptionWarn
 
         val votesJson = jacksonObjectMapper().readValue<MqttVoteJson>(jsonString)
         publishTrack(id, startTime, votesJson.votesFor, votesJson.votesAgainst)
@@ -41,6 +40,10 @@ class MqttContext {
 
     private suspend fun handlePlaying(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
         val playingJson = jacksonObjectMapper().readValue<MqttPlayingJson>(jsonString)
+        mutex.withLock {
+            PlayerState.currentTrackId = playingJson.trackId
+            PlayerState.currentStartTime = System.currentTimeMillis() - playingJson.positionMs
+        }
         publishTrack(playingJson.trackId, System.currentTimeMillis() - playingJson.positionMs)
     }
 
