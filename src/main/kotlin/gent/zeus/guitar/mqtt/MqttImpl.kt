@@ -18,8 +18,6 @@ class MqttContext {
     )
     val mqttPublisher = MqttPublisher(mqttClient, MqttQos.AT_MOST_ONCE, true)
 
-    val mutex = Mutex()
-
     suspend fun startMqtt() {
         if (Environment.MQTT_HOST.isEmpty()) return
 
@@ -31,8 +29,8 @@ class MqttContext {
     }
 
     private suspend fun handleVotes(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
-        val id = mutex.withLock { PlayerState.currentTrackId } ?: return@logExceptionWarn
-        val startTime = mutex.withLock { PlayerState.currentStartTime } ?: return@logExceptionWarn
+        val id = PlayerState.mutex.withLock { PlayerState.currentTrackId } ?: return@logExceptionWarn
+        val startTime = PlayerState.mutex.withLock { PlayerState.currentStartTime } ?: return@logExceptionWarn
 
         val votesJson = jacksonObjectMapper().readValue<MqttVoteJson>(jsonString)
         publishTrack(id, startTime, votesJson.votesFor, votesJson.votesAgainst)
@@ -40,7 +38,7 @@ class MqttContext {
 
     private suspend fun handlePlaying(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
         val playingJson = jacksonObjectMapper().readValue<MqttPlayingJson>(jsonString)
-        mutex.withLock {
+        PlayerState.mutex.withLock {
             PlayerState.currentTrackId = playingJson.trackId
             PlayerState.currentStartTime = System.currentTimeMillis() - playingJson.positionMs
         }
