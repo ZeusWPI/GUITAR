@@ -1,8 +1,6 @@
 package gent.zeus.guitar
 
-import gent.zeus.guitar.mqtt.MqttClient
-import gent.zeus.guitar.mqtt.MqttListener
-import gent.zeus.guitar.mqtt.startMqtt
+import gent.zeus.guitar.mqtt.MqttContext
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,9 +14,10 @@ open class Application
 
 suspend fun main(args: Array<String>): Unit = coroutineScope {
     Environment.SPOTIFY_CLIENT_ID  // access variable to make singleton object
+
     launch {
-        delay(2.seconds)
-        startMqtt()
+        delay(1.seconds)
+        MqttContext().startMqtt()
     }
 
     runApplication<Application>(*args)

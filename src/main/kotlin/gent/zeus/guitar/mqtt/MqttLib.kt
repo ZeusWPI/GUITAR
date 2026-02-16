@@ -12,6 +12,7 @@ import gent.zeus.guitar.logExceptionWarn
 import gent.zeus.guitar.logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -59,7 +60,6 @@ class MqttListener(private val client: MqttClient) {
      * `topic.compareTo(otherTopic)` on every item individually, so we might as well just use an array.
      */
     private val callbacks: MutableList<Pair<String, suspend (String) -> Unit>> = ArrayList()
-    private val callbackScope = CoroutineScope(Dispatchers.Default)
 
     /**
      * add a callback for messages with the specified topic. this function will be executed (concurrently)
@@ -80,16 +80,18 @@ class MqttListener(private val client: MqttClient) {
      * start listening for messages and launch the associated callback in a new coroutine when a message is received.
      * this is a blocking method (runs forever).
      */
-    fun startListening() {
+    suspend fun startListening() = coroutineScope {
+//        launch {
         while (true) {
             val (receivedTopic, content) = with(publishes.receive()) {
                 this.topic to this.payloadAsBytes.decodeToString()
             }
 
             callbacks.forEach { (topic, callback) ->
-                if (topic.isTopic(receivedTopic)) callbackScope.launch { callback(content) }
+                if (topic.isTopic(receivedTopic)) this.launch { callback(content) }
             }
         }
+//        }
     }
 
     private fun String.isTopic(topic: MqttTopic): Boolean {

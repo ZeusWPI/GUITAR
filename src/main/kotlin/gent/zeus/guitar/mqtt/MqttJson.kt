@@ -22,12 +22,12 @@ internal data class MqttVoteJson(
  * json data sent by guitar
  */
 internal data class MqttDetailJson(
+    val spotifyId: String,
     val name: String?,
     val album: String?,
     val durationInMs: Int?,
     val startedAtMs: Long,
     val endsAtMs: Long?,
-    val spotifyId: String,
     val imageUrl: String?,
     val artists: List<String>,
     val votesFor: Int?,
