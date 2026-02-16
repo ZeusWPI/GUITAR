@@ -63,11 +63,21 @@ fun <E : DataFetchError> Iterable<E>.logErrors(pre: String) = onEach {
  * @param messageOnFail message to put in log statement (will append ` (stacktrace below)`)
  * @param block code block to try executing
  */
-fun logException(messageOnFail: String, block: () -> Unit) {
+fun logExceptionFail(messageOnFail: String, block: () -> Unit) {
     try {
         block()
     } catch (e: Exception) {
-        logger.error("$messageOnFail (stacktrace below)")
+        logger.error("$messageOnFail: ${e.message} (stacktrace below)")
         throw e
     }
 }
+
+fun <R> logExceptionWarn(messageOnFail: String, block: () -> R) =
+    try {
+        block()
+    } catch (e: Exception) {
+        logger.warn("$messageOnFail: ${e.message} (stacktrace below)")
+        e.printStackTrace()
+        null
+    }
+

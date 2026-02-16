@@ -6,7 +6,8 @@ import com.hivemq.client.mqtt.lifecycle.MqttClientConnectedContext
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
-import gent.zeus.guitar.logException
+import gent.zeus.guitar.logExceptionFail
+import gent.zeus.guitar.logExceptionWarn
 import gent.zeus.guitar.logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -29,14 +30,15 @@ class MqttClient(val serverHost: String, val serverPort: Int) {
         .addConnectedListener(this::connectedListener)
         .buildBlocking()
 
-    private fun connectedListener(ctx: MqttClientConnectedContext) {
-        logger.info("mqtt connected to ${ctx.clientConfig.serverHost}:${ctx.clientConfig.serverPort}")
-    }
-
     init {
-        logException("failed to connect to mqtt server $serverHost:$serverPort!") {
+        logger.info("connecting to mqtt...")
+        logExceptionFail("failed to connect to mqtt server $serverHost:$serverPort!") {
             client.connect()
         }
+    }
+
+    private fun connectedListener(ctx: MqttClientConnectedContext) {
+        logger.info("mqtt connected to ${ctx.clientConfig.serverHost}:${ctx.clientConfig.serverPort}")
     }
 }
 
@@ -51,7 +53,7 @@ class MqttListener(client: MqttClient, vararg topics: String) {
 
     init {
         topics.forEach { topic ->
-            logException("failed to subscribe to topic $topic") {
+            logExceptionFail("failed to subscribe to topic $topic") {
                 client.client.subscribeWith().topicFilter(topic).send()
             }
             logger.info("subscribed to topic $topic")
@@ -86,7 +88,7 @@ class MqttPublisher(val client: MqttClient, val qos: MqttQos, val retain: Boolea
      * @param topic topic to publish to
      * @param message content of message
      */
-    fun publish(topic: String, message: String) = logException("error publishing message!") {
+    fun publish(topic: String, message: String) = logExceptionWarn("error publishing message!") {
         val publish = Mqtt5Publish.builder()
             .topic(topic)
             .payload(message.toByteArray(Charsets.UTF_8))
