@@ -26,22 +26,28 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'// management stuff
 //    runtimeOnly 'org.postgresql:postgresql'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 
     // -- kotlin --
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
 
     // -- mqtt --
     implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
+    implementation "com.hivemq:hivemq-mqtt-client:1.3.12"
 
+    // -- misc --
+    implementation 'com.github.f4b6a3:uuid-creator:6.1.0'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}
 
 // https://kotlinlang.org/docs/annotations.html#all-meta-target
 kotlin {

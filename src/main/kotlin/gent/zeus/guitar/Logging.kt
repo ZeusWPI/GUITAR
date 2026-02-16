@@ -1,8 +1,7 @@
 package gent.zeus.guitar
 
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 
-object Logging {
-    val log: Logger = LoggerFactory.getLogger("GUITAR")
-}
+
+val logger: Logger = LoggerFactory.getLogger("guitar log")

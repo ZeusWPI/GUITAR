@@ -1,4 +1,4 @@
-package gent.zeus.guitar.spotify
+package gent.zeus.guitar.ext.spotify
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
