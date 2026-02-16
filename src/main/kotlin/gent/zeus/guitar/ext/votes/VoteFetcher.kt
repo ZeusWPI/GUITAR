@@ -17,7 +17,7 @@ class VoteFetcher : ModelFiller<Track> {
                 votesFor = 0,
                 votesAgainst = 0,
             )
-        );
+        )
 
         val id = musicModel.spotifyId
 

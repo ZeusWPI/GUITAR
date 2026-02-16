@@ -7,7 +7,6 @@ import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.Environment
 import gent.zeus.guitar.data.Preset
 import gent.zeus.guitar.logExceptionWarn
-import gent.zeus.guitar.mqttold.MqttVoteJson
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 

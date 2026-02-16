@@ -19,6 +19,7 @@ class CombinedModelFiller<T : MusicModel>(
         }
 }
 
+@Suppress("unused")
 infix fun <T : MusicModel> ModelFiller<T>.or(other: ModelFiller<T>) =
     CombinedModelFiller(this, other)
 
