@@ -18,7 +18,10 @@ more features soon™
 
 in the kelder, the host is `http://guitar.kelder.local` (or just `http://guitar`)
 
-- `/track/{spotify id}/details`: get details about track
+- `/track/{spotify id}`
+    - `/details`: get details about track
+    - `/lyrics`: get synced lyrics in LCR format
+    - `/all`: get all available info about track (ignores errors)
 - `/album/{spotify id}/details`: get details about album
 - `/artist/{spotify id}/details`: get details about artist
 - `/current`: get details about the currently playing track
