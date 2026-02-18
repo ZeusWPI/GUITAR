@@ -11,6 +11,9 @@ abstract class DataFetchError(val message: String, val remoteError: String?, val
     override fun toString(): String {
         return this::class.simpleName ?: "anonymous class"
     }
+
+    fun debugString(): String =
+        "${toString()}(message=$message, remoteError=$remoteError, httpStatusCode=$httpStatusCode)"
 }
 
 /**
@@ -34,8 +37,8 @@ class MultiError(errors: List<DataFetchError>) : DataFetchError(
         "; ",
     ) { "${it.remoteError}" },
     httpStatusCode = when {
-        errors.any { it is UserError && it.httpStatusCode == 404 } -> 404
-        errors.any { it is UserError } -> 400
+        errors.any { it.httpStatusCode == 404 } -> 404
+        errors.any { it.httpStatusCode in 400..499 } -> 400
         else -> 500
     }
 )
