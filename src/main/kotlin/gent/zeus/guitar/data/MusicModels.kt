@@ -39,7 +39,7 @@ data class Album(
 
 data class Lyrics(
     val spotifyId: String,
-    val lrcLibId: Int,
-    val instrumental: Boolean,
-    val lyrics: String?,
+    val lrcLibId: Int? = null,
+    val instrumental: Boolean? = null,
+    val lyrics: String? = null,
 ) : MusicModel

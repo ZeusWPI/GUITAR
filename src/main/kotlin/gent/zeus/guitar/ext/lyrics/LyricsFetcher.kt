@@ -3,7 +3,6 @@ package gent.zeus.guitar.ext.lyrics
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.HttpResponse
 import gent.zeus.guitar.LRCLIB_API_URL
-import gent.zeus.guitar.REST_CLIENT
 import gent.zeus.guitar.ServerError
 import gent.zeus.guitar.UserError
 import gent.zeus.guitar.data.Lyrics
@@ -29,7 +28,7 @@ class LyricsFetcher : ModelFiller<Lyrics> {
 
         val searchQuery = "track_name=$track&artist_name=$artist&album_name=$album&duration=$duration"
 
-        val response = httpRequestIntoObj<LrcLibJson>("$LRCLIB_API_URL/search?q=$searchQuery").let {
+        val response = httpRequestIntoObj<LrcLibJson>("$LRCLIB_API_URL/get?$searchQuery").let {
             when (it) {
                 is HttpResponse.Ok -> it.body
                 is HttpResponse.Error -> return when (it.statusCode) {
