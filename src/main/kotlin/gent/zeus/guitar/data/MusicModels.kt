@@ -18,6 +18,7 @@ data class Track(
     val spotifyUrl: String? = null,
     val votesFor: Int? = null,
     val votesAgainst: Int? = null,
+    val lyrics: Lyrics? = null,
 ) : MusicModel
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -38,8 +39,7 @@ data class Album(
 ) : MusicModel
 
 data class Lyrics(
-    val spotifyId: String,
-    val lrcLibId: Int? = null,
-    val instrumental: Boolean? = null,
+    val lrcLibId: Int,
+    val instrumental: Boolean,
     val lyrics: String? = null,
-) : MusicModel
+)

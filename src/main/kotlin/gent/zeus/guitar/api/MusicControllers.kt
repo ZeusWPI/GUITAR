@@ -20,6 +20,9 @@ class TrackController {
 
     @GetMapping("/lyrics")
     private fun trackLyrics(@PathVariable id: String) = getApiResponse(Preset.Track.lyrics, id)
+
+    @GetMapping("/all")
+    private fun trackAll(@PathVariable id: String) = getApiResponse(Preset.Track.all, id)
 }
 
 

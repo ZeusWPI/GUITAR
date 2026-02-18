@@ -6,24 +6,23 @@ import gent.zeus.guitar.LRCLIB_API_URL
 import gent.zeus.guitar.ServerError
 import gent.zeus.guitar.UserError
 import gent.zeus.guitar.data.Lyrics
-import gent.zeus.guitar.data.Preset
+import gent.zeus.guitar.data.Track
 import gent.zeus.guitar.ext.ModelFiller
 import gent.zeus.guitar.httpRequestIntoObj
 import gent.zeus.guitar.storage.MemoryCache
 
-class LyricsFetcher : ModelFiller<Lyrics> {
-    override fun fetchInto(musicModel: Lyrics): DataResult<Lyrics> {
-        cache.get(musicModel.spotifyId)?.let { return DataResult.Ok(it) }
-
-        val trackDetails = when (val it = Preset.Track.voteless.getModel(musicModel.spotifyId)) {
-            is DataResult.Ok -> it.value
-            is DataResult.Error<*> -> return it
+class LyricsFetcher : ModelFiller<Track> {
+    override fun fetchInto(musicModel: Track): DataResult<Track> {
+        cache.get(musicModel.spotifyId)?.let { lyrics ->
+            musicModel.copy(
+                lyrics = lyrics
+            ).let { return DataResult.Ok(it) }
         }
 
-        val track = trackDetails.name?.replace(' ', '+')
-        val artist = trackDetails.artists?.get(0)?.name?.replace(' ', '+')
-        val album = trackDetails.album?.name?.replace(' ', '+')
-        val duration = trackDetails.durationInMs?.div(1000)
+        val track = musicModel.name?.replace(' ', '+')
+        val artist = musicModel.artists?.get(0)?.name?.replace(' ', '+')
+        val album = musicModel.album?.name?.replace(' ', '+')
+        val duration = musicModel.durationInMs?.div(1000)
 
         if (track == null || artist == null || album == null || duration == null) return DataResult.Error(
             ServerError("incomplete details from spotify api", null)
@@ -41,14 +40,17 @@ class LyricsFetcher : ModelFiller<Lyrics> {
             }
         }
 
-        musicModel.copy(
+        val lyrics = Lyrics(
             lrcLibId = response.id,
             instrumental = response.instrumental,
             lyrics = response.syncedLyrics
-        ).let {
-            cache.put(it.spotifyId, it)
-            return DataResult.Ok(it)
+        ).also {
+            cache.put(musicModel.spotifyId, it)
         }
+
+        musicModel.copy(
+            lyrics = lyrics
+        ).let { return DataResult.Ok(it) }
     }
 
     companion object {
