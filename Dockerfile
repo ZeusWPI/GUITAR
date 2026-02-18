@@ -1,6 +1,6 @@
 ## Build the project
 # see https://blog.aadilp.com/containerize-an-application-with-podman-and-buildah
-FROM docker.io/gradle:jdk24-alpine AS builder
+FROM docker.io/gradle:jdk24 AS builder
 
 WORKDIR /app
 
@@ -12,10 +12,10 @@ RUN gradle clean build -x test
 
 ## Build container to run the project
 # see https://spring.io/guides/gs/spring-boot-docker
-FROM docker.io/eclipse-temurin:24-jre-alpine
+FROM docker.io/eclipse-temurin:24-jre
 
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
+RUN useradd -d /app guitar
+USER guitar:guitar
 
 WORKDIR /app
 
