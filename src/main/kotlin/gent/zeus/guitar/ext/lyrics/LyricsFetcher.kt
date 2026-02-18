@@ -9,9 +9,12 @@ import gent.zeus.guitar.data.Lyrics
 import gent.zeus.guitar.data.Preset
 import gent.zeus.guitar.ext.ModelFiller
 import gent.zeus.guitar.httpRequestIntoObj
+import gent.zeus.guitar.storage.MemoryCache
 
 class LyricsFetcher : ModelFiller<Lyrics> {
     override fun fetchInto(musicModel: Lyrics): DataResult<Lyrics> {
+        cache.get(musicModel.spotifyId)?.let { return DataResult.Ok(it) }
+
         val trackDetails = when (val it = Preset.Track.voteless.getModel(musicModel.spotifyId)) {
             is DataResult.Ok -> it.value
             is DataResult.Error<*> -> return it
@@ -42,7 +45,14 @@ class LyricsFetcher : ModelFiller<Lyrics> {
             lrcLibId = response.id,
             instrumental = response.instrumental,
             lyrics = response.syncedLyrics
-        ).let { return DataResult.Ok(it) }
+        ).let {
+            cache.put(it.spotifyId, it)
+            return DataResult.Ok(it)
+        }
+    }
+
+    companion object {
+        private val cache = MemoryCache<String, Lyrics>()
     }
 }
 
