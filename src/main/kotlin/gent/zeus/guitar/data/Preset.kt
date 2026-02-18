@@ -15,7 +15,13 @@ object Preset {
         val detailsWithState get() = MusicModelMaker(::Track, TrackFetcher(), VoteFetcher(), PlayerStateFetcher())
         val lyrics get() = MusicModelMaker(::Track, TrackFetcher(), LyricsFetcher())
 
-        val all get() = MusicModelMaker(::Track)
+        val all
+            get() = MusicModelMaker(
+                ::Track,
+                TrackFetcher(),
+                VoteFetcher(),
+                LyricsFetcher(),
+            )
     }
 
     object Album {
