@@ -33,6 +33,7 @@ class MqttContext {
         val startTime = PlayerState.mutex.withLock { PlayerState.currentStartTime } ?: return@logExceptionWarn
 
         val votesJson = jacksonObjectMapper().readValue<MqttVoteJson>(jsonString)
+        if (votesJson.songId != id) return@logExceptionWarn
         publishTrack(id, startTime, votesJson.votesFor, votesJson.votesAgainst)
     }
 
