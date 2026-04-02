@@ -8,6 +8,9 @@ import gent.zeus.guitar.Environment
 import gent.zeus.guitar.PlayerState
 import gent.zeus.guitar.data.Preset
 import gent.zeus.guitar.logExceptionWarn
+import gent.zeus.guitar.logModuleEnabledStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -19,8 +22,6 @@ class MqttContext {
     val mqttPublisher = MqttPublisher(mqttClient, MqttQos.AT_MOST_ONCE, true)
 
     suspend fun startMqtt() {
-        if (Environment.MQTT_HOST.isEmpty()) return
-
         with(MqttListener(mqttClient)) {
             listenLibrespot(this@MqttContext)
             startListening()
@@ -57,4 +58,10 @@ class MqttContext {
             jacksonObjectMapper().writeValueAsString(publish),
         )
     }
+}
+
+fun CoroutineScope.startMqtt() = launch {
+    val enable = !Environment.MQTT_HOST.isEmpty()
+    logModuleEnabledStatus("mqtt", Environment::MQTT_HOST, enable, warnDisabled = true)
+    if (enable) MqttContext().startMqtt()
 }

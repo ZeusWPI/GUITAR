@@ -3,7 +3,7 @@ package gent.zeus.guitar
 import kotlin.reflect.KProperty
 import kotlin.system.exitProcess
 
-private typealias EnvVarProperty = KProperty<String>
+typealias EnvVarProperty = KProperty<String>
 
 /**
  * singleton object for environment variables
