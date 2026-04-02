@@ -13,13 +13,12 @@ import kotlin.time.Duration.Companion.seconds
 open class SpringBootApp
 
 suspend fun main(args: Array<String>): Unit = coroutineScope {
+    runApplication<SpringBootApp>(*args)
+
     gent.zeus.guitar.ext.spotify.init()
     gent.zeus.guitar.ext.votes.init()
 
     launch {
-        delay(1.seconds)
         MqttContext().startMqtt()
     }
-
-    runApplication<SpringBootApp>(*args)
 }
