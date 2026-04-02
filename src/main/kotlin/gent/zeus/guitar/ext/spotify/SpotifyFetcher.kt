@@ -44,3 +44,9 @@ enum class SpotifyObjectType(val apiUrlPrefix: String) {
     ALBUM("albums"),
     ARTIST("artists"),
 }
+
+fun init() {
+    Environment.checkEnvVars(exitOnFail = true) {
+        listOf(::SPOTIFY_CLIENT_ID, ::SPOTIFY_CLIENT_SECRET).exists()
+    }
+}

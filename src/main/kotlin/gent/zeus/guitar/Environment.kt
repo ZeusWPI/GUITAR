@@ -38,7 +38,7 @@ object Environment {
     fun EnvVarProperty.validate(errorMessage: String, validator: (String) -> Boolean) {
         if (validator(getenv(this.name))) return
         checkSuccess = false
-        logger.error("env variable ${this.name} is set to ${getenv(this.name)}: $errorMessage")
+        logger.error("env variable ${this.name} is set to \"${getenv(this.name)}\": $errorMessage")
     }
 
     fun List<EnvVarProperty>.validate(errorMessage: String, validator: (String) -> Boolean) =

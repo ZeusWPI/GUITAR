@@ -35,3 +35,9 @@ class VoteFetcher : ModelFiller<Track> {
         }
     }
 }
+
+fun init() {
+    Environment.checkEnvVars(exitOnFail = true) {
+        ::ZODOM_API_URL.exists()
+    }
+}

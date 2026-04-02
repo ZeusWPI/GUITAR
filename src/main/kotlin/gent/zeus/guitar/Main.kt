@@ -13,9 +13,8 @@ import kotlin.time.Duration.Companion.seconds
 open class SpringBootApp
 
 suspend fun main(args: Array<String>): Unit = coroutineScope {
-    Environment.checkEnvVars(exitOnFail = true) {
-        listOf(::SPOTIFY_CLIENT_ID, ::SPOTIFY_CLIENT_SECRET).exists()
-    }
+    gent.zeus.guitar.ext.spotify.init()
+    gent.zeus.guitar.ext.votes.init()
 
     launch {
         delay(1.seconds)
