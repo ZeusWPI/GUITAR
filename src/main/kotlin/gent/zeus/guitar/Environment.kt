@@ -1,50 +1,100 @@
 package gent.zeus.guitar
 
+import kotlin.reflect.KProperty
 import kotlin.system.exitProcess
 
 /**
  * singleton object for environment variables
  */
 object Environment {
-    private var loadFailed = false
 
-    val SPOTIFY_CLIENT_ID = loadRequired("SPOTIFY_CLIENT_ID")
-    val SPOTIFY_CLIENT_SECRET = loadRequired("SPOTIFY_CLIENT_SECRET")
+    private val vars = EnvVars()
 
-    val MQTT_HOST = load("MQTT_HOST".also { notifyDisabled("mqtt", it) })
-    val MQTT_PORT = load("MQTT_PORT")
-    val MQTT_LIBRESPOT_LISTEN_TOPIC = load("MQTT_LIBRESPOT_LISTEN_TOPIC")
-    val MQTT_ZODOM_LISTEN_TOPIC = load("MQTT_ZODOM_LISTEN_TOPIC")
-    val MQTT_PUBLISH_TOPIC = load("MQTT_PUBLISH_TOPIC")
+    val SPOTIFY_CLIENT_ID by vars.Required()
+    val SPOTIFY_CLIENT_SECRET by vars.Required()
 
-    val ZODOM_API_URL = load("ZODOM_API_URL".also { notifyDisabled("zodom data", it) })
+    val MQTT_HOST by vars.Optional()
+    val MQTT_PORT by vars.RequiredBy(::MQTT_HOST)
+    val MQTT_LIBRESPOT_LISTEN_TOPIC by vars.RequiredBy(::MQTT_HOST)
+    val MQTT_ZODOM_LISTEN_TOPIC by vars.RequiredBy(::MQTT_HOST)
+    val MQTT_PUBLISH_TOPIC by vars.RequiredBy(::MQTT_HOST)
 
-    init {
-        if (loadFailed) exitProcess(1)
+    val ZODOM_API_URL by vars.Optional()
+
+    fun load() {
+        if (!vars.check()) exitProcess(1)
     }
+}
+
+private class EnvVars {
+    private val values: MutableMap<String, String> = mutableMapOf()
+    private val failures: MutableList<EnvWrapper> = mutableListOf()
 
     /**
-     * load required environment variable
+     * check if the environment variables are valid, and prints a log message if it isn't
      *
-     * if it is empty/not set, print an error and (indirectly) end the application
-     *
-     * @return the value of the variable
+     * @return whether the environment variables are valid
      */
-    private fun loadRequired(key: String): String = System.getenv(key).takeUnless { it?.isEmpty() ?: true } ?: run {
-        logger.error("environment variable $key required but not set!")
-        loadFailed = true
-        return ""
+    fun check(): Boolean {
+        if (failures.isEmpty()) return true
+        logger.error("following environment variables were required but not set:")
+        failures.filterIsInstance<RequiredEnvWrapper>().map { it.failMessage }.forEach { msg ->
+            logger.error("    $msg")
+        }
+        return false
     }
 
-    /**
-     * load a non-required environment variable
-     *
-     * @return the value of the variable, or an empty string if it is not set
-     */
-    private fun load(key: String): String = System.getenv(key).takeUnless { it?.isEmpty() ?: true } ?: ""
+    private fun load(key: String) =
+        values[key] ?: (System.getenv(key) ?: "").also { value -> values[key] = value }
 
-    private fun notifyDisabled(what: String, envVariableKey: String) {
-        if (!load(envVariableKey).isEmpty()) return
-        logger.warn("$what is disabled because environment variable $envVariableKey is not set")
+    abstract inner class EnvWrapper {
+        protected var propertyName = ""
+
+        abstract fun getEnv(key: String): String
+
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
+            propertyName = property.name
+            return values[propertyName] ?: ""
+        }
+
+        init {
+            getEnv()
+        }
     }
+
+    private abstract inner class RequiredEnvWrapper : EnvWrapper() {
+        abstract val failMessage: String
+    }
+
+    inner class Optional : EnvWrapper() {
+        override fun getEnv(key: String): String = load(key)
+    }
+
+    private inner class Required : RequiredEnvWrapper() {
+        override val failMessage = propertyName
+
+        override fun getEnv(key: String): String {
+            val value = load(key)
+            if (value.isEmpty()) {
+                failures.add(this)
+                return ""
+            }
+            return value
+        }
+    }
+
+    inner class RequiredBy(private val other: KProperty<String>) : RequiredEnvWrapper() {
+        override val failMessage: String = "$propertyName (required because ${other.name} is set)"
+
+        override fun getEnv(key: String): String {
+            val value = load(key)
+            if (!values[other.name].isEmptyOrNull() && value.isEmpty()) {
+                failures.add(this)
+                return ""
+            }
+            return value
+        }
+    }
+
+    private fun String?.isEmptyOrNull(): Boolean = this?.isEmpty() ?: true
 }

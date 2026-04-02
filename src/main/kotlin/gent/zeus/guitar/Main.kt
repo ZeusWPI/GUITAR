@@ -7,18 +7,19 @@ import kotlinx.coroutines.launch
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import kotlin.time.Duration.Companion.seconds
+import org.slf4j.LoggerFactory
 
 
 @SpringBootApplication
-open class Application
+open class SpringBootApp
 
 suspend fun main(args: Array<String>): Unit = coroutineScope {
-    Environment.SPOTIFY_CLIENT_ID  // access variable to make singleton object
+    Environment.load()
 
     launch {
         delay(1.seconds)
         MqttContext().startMqtt()
     }
 
-    runApplication<Application>(*args)
+    runApplication<SpringBootApp>(*args)
 }
