@@ -4,13 +4,12 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import gent.zeus.guitar.Environment
 import gent.zeus.guitar.PlayerState
+import gent.zeus.guitar.isModuleEnabledAndLog
 import gent.zeus.guitar.logExceptionWarn
-import gent.zeus.guitar.logModuleEnabledStatus
 import kotlinx.coroutines.sync.withLock
 
 fun MqttListener.listenLibrespot(context: MqttContext) {
-    val enable = !Environment.MQTT_LIBRESPOT_LISTEN_TOPIC.isEmpty()
-    logModuleEnabledStatus("mqtt librespot listening", Environment::MQTT_LIBRESPOT_LISTEN_TOPIC, enable)
+    val enable = isModuleEnabledAndLog("mqtt librespot listening", Environment::MQTT_LIBRESPOT_LISTEN_TOPIC)
     if (!enable) return
 
     addCallback(Environment.MQTT_ZODOM_LISTEN_TOPIC, context::handleVotes)

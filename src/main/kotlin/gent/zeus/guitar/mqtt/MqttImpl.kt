@@ -1,18 +1,13 @@
 package gent.zeus.guitar.mqtt
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.Environment
-import gent.zeus.guitar.PlayerState
 import gent.zeus.guitar.data.Preset
-import gent.zeus.guitar.logExceptionWarn
-import gent.zeus.guitar.logModuleEnabledStatus
+import gent.zeus.guitar.isModuleEnabledAndLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 class MqttContext {
     val mqttClient = MqttClient(
@@ -61,7 +56,6 @@ class MqttContext {
 }
 
 fun CoroutineScope.startMqtt() = launch {
-    val enable = !Environment.MQTT_HOST.isEmpty()
-    logModuleEnabledStatus("mqtt", Environment::MQTT_HOST, enable, warnDisabled = true)
+    val enable = isModuleEnabledAndLog("mqtt", Environment::MQTT_HOST, warnDisabled = true)
     if (enable) MqttContext().startMqtt()
 }

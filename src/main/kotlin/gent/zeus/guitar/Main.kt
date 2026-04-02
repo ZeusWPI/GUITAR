@@ -17,3 +17,26 @@ suspend fun main(args: Array<String>): Unit = coroutineScope {
 
     startMqtt()
 }
+
+fun isModuleEnabledAndLog(
+    moduleName: String,
+    envVar: EnvVarProperty,
+    warnDisabled: Boolean = false,
+    warnEnabled: Boolean = false
+): Boolean {
+    val enabled = !(System.getenv(envVar.name)?.isEmpty() ?: true)
+
+    val warn = if (enabled) warnEnabled else warnDisabled
+
+    val message = if (enabled)
+        "$moduleName is ENABLED (${envVar.name} is set)"
+    else
+        "$moduleName is DISABLED (${envVar.name} is not set)"
+
+    if (warn)
+        logger.warn(message)
+    else
+        logger.info(message)
+
+    return enabled
+}
