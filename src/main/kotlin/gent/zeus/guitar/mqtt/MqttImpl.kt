@@ -22,31 +22,12 @@ class MqttContext {
         if (Environment.MQTT_HOST.isEmpty()) return
 
         with(MqttListener(mqttClient)) {
-            addCallback(Environment.MQTT_ZODOM_LISTEN_TOPIC, ::handleVotes)
-            addCallback(Environment.MQTT_LIBRESPOT_LISTEN_TOPIC, ::handlePlaying)
+            listenLibrespot(this@MqttContext)
             startListening()
         }
     }
 
-    private suspend fun handleVotes(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
-        val id = PlayerState.mutex.withLock { PlayerState.currentTrackId } ?: return@logExceptionWarn
-        val startTime = PlayerState.mutex.withLock { PlayerState.currentStartTime } ?: return@logExceptionWarn
-
-        val votesJson = jacksonObjectMapper().readValue<MqttVoteJson>(jsonString)
-        if (votesJson.songId != id) return@logExceptionWarn
-        publishTrack(id, startTime, votesJson.votesFor, votesJson.votesAgainst)
-    }
-
-    private suspend fun handlePlaying(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
-        val playingJson = jacksonObjectMapper().readValue<MqttPlayingJson>(jsonString)
-        PlayerState.mutex.withLock {
-            PlayerState.currentTrackId = playingJson.trackId
-            PlayerState.currentStartTime = System.currentTimeMillis() - playingJson.positionMs
-        }
-        publishTrack(playingJson.trackId, System.currentTimeMillis() - playingJson.positionMs)
-    }
-
-    private fun publishTrack(id: String, startMs: Long, votesFor: Int? = null, votesAgainst: Int? = null) {
+    internal fun publishTrack(id: String, startMs: Long, votesFor: Int? = null, votesAgainst: Int? = null) {
         val track = when (val it =
             if (votesFor == null || votesAgainst == null)
                 Preset.Track.details.getModel(id, true)
