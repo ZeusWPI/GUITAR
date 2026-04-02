@@ -12,17 +12,7 @@ fun MqttListener.listenLibrespot(context: MqttContext) {
     val enable = isModuleEnabledAndLog("mqtt librespot listening", Environment::MQTT_LIBRESPOT_LISTEN_TOPIC)
     if (!enable) return
 
-    addCallback(Environment.MQTT_ZODOM_LISTEN_TOPIC, context::handleVotes)
     addCallback(Environment.MQTT_LIBRESPOT_LISTEN_TOPIC, context::handlePlaying)
-}
-
-private suspend fun MqttContext.handleVotes(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
-    val id = PlayerState.mutex.withLock { PlayerState.currentTrackId } ?: return@logExceptionWarn
-    val startTime = PlayerState.mutex.withLock { PlayerState.currentStartTime } ?: return@logExceptionWarn
-
-    val votesJson = jacksonObjectMapper().readValue<MqttVoteJson>(jsonString)
-    if (votesJson.songId != id) return@logExceptionWarn
-    publishTrack(id, startTime, votesJson.votesFor, votesJson.votesAgainst)
 }
 
 private suspend fun MqttContext.handlePlaying(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {

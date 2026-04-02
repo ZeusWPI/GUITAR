@@ -19,6 +19,7 @@ class MqttContext {
     suspend fun startMqtt() {
         with(MqttListener(mqttClient)) {
             listenLibrespot(this@MqttContext)
+            listenZodom(this@MqttContext)
             startListening()
         }
     }
