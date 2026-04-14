@@ -23,3 +23,13 @@ private suspend fun MqttContext.handleVotes(jsonString: String) = logExceptionWa
     if (votesJson.songId != id) return@logExceptionWarn
     publishTrack(id, startTime, votesJson.votesFor, votesJson.votesAgainst)
 }
+
+/**
+ * json data sent on votes topic
+ */
+internal data class MqttVoteJson(
+    val songId: String?,
+    val votesFor: Int?,
+    val votesAgainst: Int?,
+)
+

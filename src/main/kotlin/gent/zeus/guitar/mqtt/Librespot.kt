@@ -23,3 +23,11 @@ private suspend fun MqttContext.handlePlaying(jsonString: String) = logException
     }
     publishTrack(playingJson.trackId, System.currentTimeMillis() - playingJson.positionMs)
 }
+
+/**
+ * json data sent on librespot topic
+ */
+internal data class MqttPlayingJson(
+    val trackId: String,
+    val positionMs: Int,
+)

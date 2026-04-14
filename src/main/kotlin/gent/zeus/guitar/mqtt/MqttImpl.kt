@@ -56,6 +56,22 @@ class MqttContext {
     }
 }
 
+/**
+ * json data sent by guitar
+ */
+internal data class MqttDetailJson(
+    val spotifyId: String,
+    val name: String?,
+    val album: String?,
+    val durationInMs: Int?,
+    val startedAtMs: Long,
+    val endsAtMs: Long?,
+    val imageUrl: String?,
+    val artists: List<String>,
+    val votesFor: Int?,
+    val votesAgainst: Int?,
+)
+
 fun CoroutineScope.startMqtt() = launch {
     val enable = isModuleEnabledAndLog("mqtt", Environment::MQTT_HOST, warnDisabled = true)
     if (enable) MqttContext().startMqtt()
