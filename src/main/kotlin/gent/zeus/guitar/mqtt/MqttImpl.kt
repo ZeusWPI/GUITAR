@@ -16,7 +16,7 @@ class MqttContext {
         Environment.MQTT_HOST,
         Environment.MQTT_PORT.toInt(),  // TODO: exception handling for port.toInt
     )
-    val mqttPublisher = MqttPublisher(mqttClient, MqttQos.AT_MOST_ONCE, true)
+    val mqttPublisher = MqttPublisher(mqttClient, MqttQos.AT_LEAST_ONCE, true)
 
     suspend fun startMqtt() {
         with(MqttListener(mqttClient)) {
