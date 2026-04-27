@@ -19,6 +19,8 @@ object PlayerState {
      */
     var currentStartTime: Long? = null
 
+    var paused: Boolean = false
+
     val mutex = Mutex()
 }
 

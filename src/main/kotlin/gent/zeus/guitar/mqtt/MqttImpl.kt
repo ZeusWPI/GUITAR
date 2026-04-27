@@ -27,7 +27,13 @@ class MqttContext {
         }
     }
 
-    internal fun publishTrack(id: String, startMs: Long, votesFor: Int? = null, votesAgainst: Int? = null) {
+    internal fun publishTrack(
+        id: String,
+        startMs: Long,
+        paused: Boolean,
+        votesFor: Int? = null,
+        votesAgainst: Int? = null
+    ) {
         val track = when (val it =
             if (votesFor == null || votesAgainst == null)
                 Preset.Track.details.getModel(id, true)
@@ -49,7 +55,8 @@ class MqttContext {
             imageUrl = track.imageUrl,
             artists = track.artists?.mapNotNull { it.name } ?: emptyList(),
             votesFor = votesFor ?: track.votesFor,
-            votesAgainst = votesAgainst ?: track.votesAgainst
+            votesAgainst = votesAgainst ?: track.votesAgainst,
+            paused = paused,
         )
 
         mqttPublisher.publish(
@@ -58,9 +65,10 @@ class MqttContext {
         )
     }
 
-    internal suspend fun updateCurrent(trackId: String, startTime: Long) = PlayerState.mutex.withLock {
+    internal suspend fun updateCurrent(trackId: String, startTime: Long, paused: Boolean) = PlayerState.mutex.withLock {
         PlayerState.currentTrackId = trackId
         PlayerState.currentStartTime = startTime
+        PlayerState.paused = paused
     }
 }
 
@@ -72,12 +80,13 @@ internal data class MqttDetailJson(
     val name: String?,
     val album: String?,
     val durationInMs: Int?,
-    val startedAtMs: Long,
-    val endsAtMs: Long?,
     val imageUrl: String?,
     val artists: List<String>,
     val votesFor: Int?,
     val votesAgainst: Int?,
+    val startedAtMs: Long,
+    val endsAtMs: Long?,
+    val paused: Boolean,
 )
 
 fun CoroutineScope.startMqtt() = launch {

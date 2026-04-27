@@ -17,10 +17,11 @@ fun MqttListener.listenZodom(context: MqttContext) {
 private suspend fun MqttContext.handleVotes(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
     val id = PlayerState.mutex.withLock { PlayerState.currentTrackId } ?: return@logExceptionWarn
     val startTime = PlayerState.mutex.withLock { PlayerState.currentStartTime } ?: return@logExceptionWarn
+    val paused = PlayerState.mutex.withLock { PlayerState.paused } ?: return@logExceptionWarn
 
     val votesJson = jacksonObjectMapper().readValue<MqttVoteJson>(jsonString)
     if (votesJson.songId != id) return@logExceptionWarn
-    publishTrack(id, startTime, votesJson.votesFor, votesJson.votesAgainst)
+    publishTrack(id, startTime, paused, votesJson.votesFor, votesJson.votesAgainst)
 }
 
 /**

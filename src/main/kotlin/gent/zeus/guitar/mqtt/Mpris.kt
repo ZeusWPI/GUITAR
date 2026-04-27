@@ -25,8 +25,8 @@ private suspend fun MqttContext.handleMpris(jsonString: String) {
         val id = spotifyPrefixRegex.replace(playing.metadata.trackId, "")
 
         val startTime = System.currentTimeMillis() - playing.positionMs
-        updateCurrent(id, startTime)
-        publishTrack(id, startTime)
+        updateCurrent(id, startTime, playing.paused)
+        publishTrack(id, startTime, playing.paused)
     } catch (e: Exception) {
         e.logStacktrace("error decoding json")
     }
@@ -36,8 +36,12 @@ private suspend fun MqttContext.handleMpris(jsonString: String) {
 private data class MprisPlayingJson(
     @JsonProperty("Metadata") val metadata: MprisMetadata,
     @JsonProperty("Position") val position: Long,
+    @JsonProperty("PlaybackStatus") private val playbackStatusStr: String,
+    @JsonProperty("LoopStatus") private val loopStatusStr: String,
 ) {
     val positionMs get() = position / 1000
+    val paused get() = playbackStatusStr == "Paused"
+    val loopStatus get() = LoopStatus.fromString(loopStatusStr)
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -45,3 +49,18 @@ private data class MprisMetadata(
     @JsonProperty("xesam:url") val url: String,
     @JsonProperty("mpris:trackid") val trackId: String,
 )
+
+private enum class LoopStatus(private val stringName: String) {
+    NONE("none"), PLAYLIST("playlist"), TRACK("track");
+
+    override fun toString(): String = stringName
+
+    companion object {
+        fun fromString(string: String): LoopStatus = when (string.lowercase()) {
+            "none" -> NONE
+            "playlist" -> PLAYLIST
+            "track" -> TRACK
+            else -> throw IllegalArgumentException("$string is not a valid loop status")
+        }
+    }
+}
