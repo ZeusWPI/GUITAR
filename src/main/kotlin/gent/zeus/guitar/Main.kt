@@ -21,7 +21,7 @@ suspend fun main(args: Array<String>): Unit = coroutineScope {
 fun isModuleEnabledAndLog(
     moduleName: String,
     envVar: EnvVarProperty,
-    warnDisabled: Boolean = false,
+    warnDisabled: Boolean = true,
     warnEnabled: Boolean = false
 ): Boolean {
     val enabled = !(System.getenv(envVar.name)?.isEmpty() ?: true)

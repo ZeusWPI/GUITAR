@@ -20,6 +20,7 @@ class MqttContext {
         with(MqttListener(mqttClient)) {
             listenLibrespot(this@MqttContext)
             listenZodom(this@MqttContext)
+            listenMpris(this@MqttContext)
             startListening()
         }
     }

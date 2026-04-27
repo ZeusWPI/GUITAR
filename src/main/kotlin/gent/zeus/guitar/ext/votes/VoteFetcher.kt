@@ -12,7 +12,7 @@ class VoteFetcher : ModelFiller<Track> {
     data class VoteCount(val songId: String, val votesFor: Int, val votesAgainst: Int)
 
     override fun fetchInto(musicModel: Track): DataResult<Track> {
-        if (Environment.ZODOM_API_URL.isEmpty()) return DataResult.Ok(
+        if (!zodomApiEnabled) return DataResult.Ok(
             musicModel.copy(
                 votesFor = 0,
                 votesAgainst = 0,
