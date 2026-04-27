@@ -36,8 +36,12 @@ class VoteFetcher : ModelFiller<Track> {
     }
 }
 
+private var zodomApiEnabled = true
+
 fun init() {
-    Environment.checkEnvVars(exitOnFail = true) {
-        ::ZODOM_API_URL.exists()
-    }
+    zodomApiEnabled = isModuleEnabledAndLog(
+        "zodom api",
+        Environment::ZODOM_API_URL,
+        warnDisabled = true,
+    )
 }
