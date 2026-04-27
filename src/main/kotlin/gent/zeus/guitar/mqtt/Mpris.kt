@@ -1,5 +1,6 @@
 package gent.zeus.guitar.mqtt
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -29,6 +30,7 @@ private suspend fun MqttContext.handleMpris(jsonString: String) {
     }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 private data class MprisPlayingJson(
     @JsonProperty("Metadata") val metadata: MprisMetadata,
     @JsonProperty("Position") val position: Long,
@@ -36,6 +38,7 @@ private data class MprisPlayingJson(
     val positionMs get() = position / 1000
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 private data class MprisMetadata(
     @JsonProperty("xesam:url") val url: String,
     @JsonProperty("mpris:trackid") val trackId: String,
