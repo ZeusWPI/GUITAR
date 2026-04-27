@@ -24,7 +24,9 @@ private suspend fun MqttContext.handleMpris(jsonString: String) {
         if (!playing.metadata.trackId.contains(spotifyPrefixRegex)) return
         val id = spotifyPrefixRegex.replace(playing.metadata.trackId, "")
 
-        publishTrack(id, System.currentTimeMillis() - playing.positionMs)
+        val startTime = System.currentTimeMillis() - playing.positionMs
+        updateCurrent(id, startTime)
+        publishTrack(id, startTime)
     } catch (e: Exception) {
         e.logStacktrace("error decoding json")
     }

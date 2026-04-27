@@ -4,10 +4,12 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import gent.zeus.guitar.DataResult
 import gent.zeus.guitar.Environment
+import gent.zeus.guitar.PlayerState
 import gent.zeus.guitar.data.Preset
 import gent.zeus.guitar.isModuleEnabledAndLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 
 class MqttContext {
     val mqttClient = MqttClient(
@@ -54,6 +56,11 @@ class MqttContext {
             Environment.MQTT_PUBLISH_TOPIC,
             jacksonObjectMapper().writeValueAsString(publish),
         )
+    }
+
+    internal suspend fun updateCurrent(trackId: String, startTime: Long) = PlayerState.mutex.withLock {
+        PlayerState.currentTrackId = trackId
+        PlayerState.currentStartTime = startTime
     }
 }
 

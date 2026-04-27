@@ -16,11 +16,9 @@ fun MqttListener.listenLibrespot(context: MqttContext) {
 
 private suspend fun MqttContext.handlePlaying(jsonString: String) = logExceptionWarn("error decoding json from mqtt") {
     val playingJson = jacksonObjectMapper().readValue<MqttPlayingJson>(jsonString)
-    PlayerState.mutex.withLock {
-        PlayerState.currentTrackId = playingJson.trackId
-        PlayerState.currentStartTime = System.currentTimeMillis() - playingJson.positionMs
-    }
-    publishTrack(playingJson.trackId, System.currentTimeMillis() - playingJson.positionMs)
+    val startTime = System.currentTimeMillis() - playingJson.positionMs
+    updateCurrent(playingJson.trackId, startTime)
+    publishTrack(playingJson.trackId, startTime)
 }
 
 /**
