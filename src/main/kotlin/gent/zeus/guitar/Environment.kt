@@ -19,6 +19,7 @@ object Environment {
     val MQTT_PORT by vars
     val MQTT_LIBRESPOT_LISTEN_TOPIC by vars
     val MQTT_ZODOM_LISTEN_TOPIC by vars
+    val MQTT_MPRIS_LISTEN_TOPIC by vars
     val MQTT_PUBLISH_TOPIC by vars
 
     val ZODOM_API_URL by vars

@@ -9,8 +9,7 @@ import gent.zeus.guitar.logExceptionWarn
 import kotlinx.coroutines.sync.withLock
 
 fun MqttListener.listenLibrespot(context: MqttContext) {
-    val enable = isModuleEnabledAndLog("mqtt librespot listening", Environment::MQTT_LIBRESPOT_LISTEN_TOPIC)
-    if (!enable) return
+    if (!isModuleEnabledAndLog("mqtt librespot listening", Environment::MQTT_LIBRESPOT_LISTEN_TOPIC)) return
 
     addCallback(Environment.MQTT_LIBRESPOT_LISTEN_TOPIC, context::handlePlaying)
 }

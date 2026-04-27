@@ -76,3 +76,7 @@ inline fun <R> logExceptionWarn(messageOnFail: String, block: () -> R) =
         null
     }
 
+fun Exception.logStacktrace(extraMessage: String) {
+    logger.warn("$extraMessage: ${message} (stacktrace below)")
+    printStackTrace()
+}

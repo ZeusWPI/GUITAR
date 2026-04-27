@@ -9,8 +9,7 @@ import gent.zeus.guitar.logExceptionWarn
 import kotlinx.coroutines.sync.withLock
 
 fun MqttListener.listenZodom(context: MqttContext) {
-    val enable = isModuleEnabledAndLog("mqtt zodom listening", Environment::MQTT_ZODOM_LISTEN_TOPIC)
-    if (!enable) return
+    if (!isModuleEnabledAndLog("mqtt zodom listening", Environment::MQTT_ZODOM_LISTEN_TOPIC)) return
 
     addCallback(Environment.MQTT_ZODOM_LISTEN_TOPIC, context::handleVotes)
 }
